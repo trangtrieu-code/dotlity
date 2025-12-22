@@ -1,0 +1,8 @@
+{
+  "name": "dotlity",
+  "private": true,
+  "scripts": {
+    "start": "npx serve . -p 3001",
+    "serve": "npx serve . -p 3001"
+  }
+}
