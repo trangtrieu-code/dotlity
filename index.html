@@ -32,8 +32,22 @@
     </script>
 </head>
 <body class="min-h-screen font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
+    <!-- Fixed header stays at top while scrolling -->
+    <header class="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4">
+        <div>
+            <!-- IDs let JavaScript find and update these elements -->
+            <div id="headerGreeting" class="text-xl font-display font-semibold">Hello</div>
+            <div class="flex items-center gap-3 mt-1">
+                <span class="material-symbols-outlined text-lg" aria-hidden="true">schedule</span>
+                <span id="headerTime">--:--</span>
+                <span class="material-symbols-outlined text-lg" id="headerWeatherIcon" aria-hidden="true">wb_sunny</span>
+                <span id="headerWeatherText">--°C</span>
+            </div>
+        </div>
+    </header>
     <main class="relative w-full h-screen p-20"></main>
 
+    <!-- Scripts load in order: app.js runs first, then time-weather.js updates the header -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="js/app.js"></script>
     <script src="js/time-weather.js"></script>
