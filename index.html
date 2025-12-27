@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,13 +13,11 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     <script>
       tailwind.config = {
-        darkMode: "class",
         theme: {
           extend: {
             colors: {
               primary: "#77B1AD",
               "background-light": "#F8F9FA",
-              "background-dark": "#121212",
             },
             fontFamily: {
               sans: ["Inter", "sans-serif"],
@@ -31,7 +29,7 @@
       };
     </script>
 </head>
-<body class="min-h-screen font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
+<body class="min-h-screen font-sans text-slate-800 transition-colors duration-300 overflow-hidden">
     <!-- Fixed header stays at top while scrolling -->
     <header class="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4">
         <div>
@@ -45,7 +43,108 @@
             </div>
         </div>
     </header>
-    <main class="relative w-full h-screen p-20"></main>
+    <main class="relative w-full h-screen p-20">
+        <!-- Focus (Pomodoro) - empty shell -->
+        <div id="widgetFocus" class="widget-window glass absolute top-[15%] left-[30%] w-[420px] max-w-[95vw] hidden" data-widget="focus">
+            <div class="widget-header">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-500 text-lg">timer</span>
+                    <span class="text-sm font-semibold">Focus</span>
+                </div>
+                <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="focus" type="button" aria-label="Close">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+        </div>
+
+        <!-- Notes - empty shell -->
+        <div id="widgetNotes" class="widget-window glass absolute top-[15%] right-[10%] w-[400px] max-w-[95vw] hidden" data-widget="notes">
+            <div class="widget-header">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-500 text-lg">description</span>
+                    <span class="text-sm font-semibold">Notes</span>
+                </div>
+                <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="notes" type="button" aria-label="Close">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+        </div>
+
+        <!-- Todo - empty shell -->
+        <div id="widgetTodo" class="widget-window glass absolute bottom-[25%] left-[10%] w-72 hidden" data-widget="todo">
+            <div class="widget-header">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-500 text-lg">task_alt</span>
+                    <span class="text-sm font-semibold">To-Do</span>
+                </div>
+                <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="todo" type="button" aria-label="Close">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+        </div>
+
+        <!-- Music - empty shell -->
+        <div id="widgetMusic" class="widget-window glass absolute top-[55%] right-[15%] w-[380px] max-w-[95vw] hidden" data-widget="music">
+            <div class="widget-header">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-500 text-lg">music_note</span>
+                    <span class="text-sm font-semibold">Music</span>
+                </div>
+                <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="music" type="button" aria-label="Close">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+        </div>
+
+        <!-- Ambient - empty shell -->
+        <div id="widgetAmbient" class="widget-window glass absolute bottom-[18%] right-[38%] w-80 hidden" data-widget="ambient">
+            <div class="widget-header">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-slate-500 text-lg">waves</span>
+                    <span class="text-sm font-semibold">Ambient</span>
+                </div>
+                <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="ambient" type="button" aria-label="Close">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+        </div>
+    </main>
+
+    <!-- Bottom nav: glass bar, widget buttons + Settings -->
+    <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+        <div class="glass px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-1 border border-white/50">
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="notes" type="button" aria-label="Notes">
+                <span class="material-symbols-outlined">description</span>
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Notes</span>
+            </button>
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="todo" type="button" aria-label="Todo">
+                <span class="material-symbols-outlined">task_alt</span>
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Tasks</span>
+            </button>
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="focus" type="button" aria-label="Focus">
+                <span class="material-symbols-outlined">timer</span>
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Focus</span>
+            </button>
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="music" type="button" aria-label="Music">
+                <span class="material-symbols-outlined">music_note</span>
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Music</span>
+            </button>
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="ambient" type="button" aria-label="Ambient">
+                <span class="material-symbols-outlined">waves</span>
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Ambient</span>
+            </button>
+            <div class="w-px h-6 bg-slate-200 mx-2" aria-hidden="true"></div>
+            <button id="appSettingsBtn" class="p-3 rounded-xl hover:bg-slate-100 transition-all group relative" type="button" aria-label="Settings">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Settings</span>
+            </button>
+        </div>
+    </nav>
 
     <!-- Scripts load in order: app.js runs first, then time-weather.js updates the header -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
