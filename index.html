@@ -13,11 +13,13 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     <script>
       tailwind.config = {
+        darkMode: "class",
         theme: {
           extend: {
             colors: {
               primary: "#77B1AD",
               "background-light": "#F8F9FA",
+              "background-dark": "#121212",
             },
             fontFamily: {
               sans: ["Inter", "sans-serif"],
@@ -29,11 +31,10 @@
       };
     </script>
 </head>
-<body class="min-h-screen font-sans text-slate-800 transition-colors duration-300 overflow-hidden">
+<body class="min-h-screen font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
     <!-- Fixed header stays at top while scrolling -->
     <header class="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4">
         <div>
-            <!-- IDs let JavaScript find and update these elements -->
             <div id="headerGreeting" class="text-xl font-display font-semibold">Hello</div>
             <div class="flex items-center gap-3 mt-1">
                 <span class="material-symbols-outlined text-lg" aria-hidden="true">schedule</span>
@@ -42,6 +43,9 @@
                 <span id="headerWeatherText">--°C</span>
             </div>
         </div>
+        <button id="themeToggle" type="button" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <span class="material-symbols-outlined">dark_mode</span>
+        </button>
     </header>
     <main class="relative w-full h-screen p-20">
         <!-- Focus (Pomodoro) - empty shell -->
@@ -117,29 +121,29 @@
 
     <!-- Bottom nav: glass bar, widget buttons + Settings -->
     <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
-        <div class="glass px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-1 border border-white/50">
-            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="notes" type="button" aria-label="Notes">
+        <div class="glass px-4 py-2 rounded-2xl shadow-2xl flex items-center gap-1 border border-white/50 dark:border-slate-700">
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group relative" data-widget="notes" type="button" aria-label="Notes">
                 <span class="material-symbols-outlined">description</span>
                 <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Notes</span>
             </button>
-            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="todo" type="button" aria-label="Todo">
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group relative" data-widget="todo" type="button" aria-label="Todo">
                 <span class="material-symbols-outlined">task_alt</span>
                 <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Tasks</span>
             </button>
-            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="focus" type="button" aria-label="Focus">
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group relative" data-widget="focus" type="button" aria-label="Focus">
                 <span class="material-symbols-outlined">timer</span>
                 <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Focus</span>
             </button>
-            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="music" type="button" aria-label="Music">
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group relative" data-widget="music" type="button" aria-label="Music">
                 <span class="material-symbols-outlined">music_note</span>
                 <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Music</span>
             </button>
-            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 transition-all group relative" data-widget="ambient" type="button" aria-label="Ambient">
+            <button class="nav-widget p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group relative" data-widget="ambient" type="button" aria-label="Ambient">
                 <span class="material-symbols-outlined">waves</span>
                 <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Ambient</span>
             </button>
-            <div class="w-px h-6 bg-slate-200 mx-2" aria-hidden="true"></div>
-            <button id="appSettingsBtn" class="p-3 rounded-xl hover:bg-slate-100 transition-all group relative" type="button" aria-label="Settings">
+            <div class="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-2" aria-hidden="true"></div>
+            <button id="appSettingsBtn" class="p-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group relative" type="button" aria-label="Settings">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Settings</span>
             </button>

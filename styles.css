@@ -6,10 +6,21 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 /* ========== Body ========== */
 body {
   background-color: #f1f3f4;
   background-image: radial-gradient(circle, #c4c4c4 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark body {
+  background-color: #121212;
+  background-image: radial-gradient(circle, #2a2a2a 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -32,6 +43,11 @@ body {
   background: #fff;
   border-bottom: 1px solid #f1f5f9;
   cursor: move;
+}
+
+.dark .widget-header {
+  background: #1e293b;
+  border-color: #334155;
 }
 
 .widget-window.hidden {
@@ -71,4 +87,9 @@ body {
 .nav-widget.active {
   background: #e2e8f0;
   color: #475569;
+}
+
+.dark .nav-widget.active {
+  background: #334155;
+  color: #94a3b8;
 }

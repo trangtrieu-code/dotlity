@@ -1,4 +1,25 @@
 (function () {
+  const STORAGE_THEME = 'dotlity-theme';
+
+  // ----- Theme: apply saved preference on load (skip if custom background is used later) -----
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem(STORAGE_THEME);
+  if (savedTheme === 'dark') {
+    html.classList.add('dark');
+  } else {
+    html.classList.remove('dark');
+  }
+
+  // ----- Theme toggle: click to switch light/dark and persist -----
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      html.classList.toggle('dark');
+      const isDark = html.classList.contains('dark');
+      localStorage.setItem(STORAGE_THEME, isDark ? 'dark' : 'light');
+    });
+  }
+
   // ----- Helper: turn "notes" into "widgetNotes" so we can find the panel in the HTML -----
   function getWidgetId(widgetName) {
     const firstLetter = widgetName.charAt(0).toUpperCase();
