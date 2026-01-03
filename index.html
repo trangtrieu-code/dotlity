@@ -76,7 +76,7 @@
             <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
         </div>
 
-        <!-- Todo - empty shell -->
+        <!-- Todo -->
         <div id="widgetTodo" class="widget-window glass absolute bottom-[25%] left-[10%] w-72 hidden" data-widget="todo">
             <div class="widget-header">
                 <div class="flex items-center gap-2">
@@ -87,7 +87,24 @@
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
-            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+            
+            <!-- Todo content -->      
+            <div class="p-4">
+                <div class="flex gap-2 mb-4">
+                    <input id="todoInput" class="todo-input flex-1 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" type="text" placeholder="Add a task..." maxlength="256" />
+                    <button id="todoAddBtn" class="todo-add-btn flex-shrink-0 p-2 rounded-lg bg-[#72D3C4] text-white hover:opacity-90 transition-opacity" type="button" aria-label="Add task">
+                        <span class="material-symbols-outlined text-lg">add</span>
+                    </button>
+                </div>
+                <div id="todoListWrap" class="min-h-[80px]">
+                    <div id="todoList" class="flex flex-col gap-2"></div>
+                    <div id="todoEmpty" class="flex flex-col items-center justify-center py-6 text-slate-400 text-sm text-center">
+                        <p>Your task list is empty.</p>
+                        <p>Add a task to get started!</p>
+                    </div>
+                </div>
+                <p class="text-center pt-2 text-[10px] text-slate-400 dark:text-slate-500">Click tick to complete. Double-click text to edit.</p>
+            </div>
         </div>
 
         <!-- Music - empty shell -->
