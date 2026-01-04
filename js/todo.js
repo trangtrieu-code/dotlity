@@ -9,6 +9,7 @@
   const todoAddBtn = document.getElementById('todoAddBtn');
   const todoList = document.getElementById('todoList');
   const todoEmpty = document.getElementById('todoEmpty');
+  const todoCompletedCount = document.getElementById('todoCompletedCount');
 
   if (!todoList || !todoEmpty) return;
 
@@ -30,17 +31,22 @@
     } catch (e) {}
   }
 
-  // ----- 3. Render list (and empty state) -----
+  // ----- 3. Render list (and empty state / completed count) -----
   function render() {
     const tasks = loadTasks();
     todoList.innerHTML = '';
 
+    // Render empty state
     if (tasks.length === 0) {
       todoEmpty.classList.remove('hidden');
+      if (todoCompletedCount) todoCompletedCount.textContent = '0 of 0 completed';
       return;
     }
 
+    // Render completed count
     todoEmpty.classList.add('hidden');
+    const completed = tasks.filter(function (t) { return t.done; }).length;
+    if (todoCompletedCount) todoCompletedCount.textContent = completed + ' of ' + tasks.length + ' completed';
 
     // Render tasks
     tasks.forEach(function (task) {
