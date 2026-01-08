@@ -103,3 +103,68 @@ body {
 .todo-item .todo-edit-input {
   min-width: 0;
 }
+
+/* ========== Notes widget ========== */
+.widget-notes {
+  min-height: 320px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-notes .widget-header {
+  flex-shrink: 0;
+}
+
+.notes-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.notes-sidebar {
+  flex-shrink: 0;
+}
+
+.notes-list {
+  min-height: 80px;
+}
+
+.notes-list-item {
+  cursor: pointer;
+}
+
+.notes-editor-wrap {
+  min-height: 0;
+}
+
+.notes-placeholder {
+  pointer-events: none;
+}
+
+/* Note popup (zoom view) */
+.notes-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.notes-popup-overlay.hidden {
+  display: none !important;
+}
+
+.notes-popup {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.notes-popup-body {
+  min-height: 0;
+  overflow: auto;
+}
