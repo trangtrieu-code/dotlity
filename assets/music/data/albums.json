@@ -1,0 +1,50 @@
+{
+    "1.morning": {
+        "name": "Morning",
+        "folder": "1.morning",
+        "tracks": [
+            "Daybreak.mp3",
+            "Early honeydew.mp3",
+            "First light.mp3",
+            "Loving first minute.mp3",
+            "Morning Dust on the Mantel.mp3",
+            "Morningbird.mp3",
+            "Soft Sun on My Desk.mp3",
+            "Sunrise On Shelf Street.mp3",
+            "Sunrise Steam.mp3",
+            "The dawn.mp3"
+        ]
+    },
+    "2.afternoon": {
+        "name": "Afternoon",
+        "folder": "2.afternoon",
+        "tracks": [
+            "Afternoon tea.mp3",
+            "Afternoon Window Light.mp3",
+            "Evening stars.mp3",
+            "Happy life after.mp3",
+            "Last Drop Of Sun In My Coffee.mp3",
+            "Last light of the day.mp3",
+            "My way home.mp3",
+            "Soft Shadows at Four.mp3",
+            "Streetlights.mp3",
+            "That afternoon.mp3"
+        ]
+    },
+    "3.evening": {
+        "name": "Evening",
+        "folder": "3.evening",
+        "tracks": [
+            "Adventure dream.mp3",
+            "Bubble bath.mp3",
+            "Cozy throw.mp3",
+            "Cup of Warm Milk.mp3",
+            "Firefly.mp3",
+            "Nightfall Lullaby.mp3",
+            "Purple horizon.mp3",
+            "Quiet sleep.mp3",
+            "Readtime.mp3",
+            "Softly Past Midnight.mp3"
+        ]
+    }
+}

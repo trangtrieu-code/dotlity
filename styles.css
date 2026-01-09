@@ -168,3 +168,38 @@ body {
   min-height: 0;
   overflow: auto;
 }
+
+/* ========== Music widget ========== */
+.music-player-body {
+  overflow: visible;
+}
+
+.music-progress-bar {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.music-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e2e8f0;
+  border-radius: 2px;
+  height: 6px;
+}
+
+.music-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--primary-color, #77B1AD);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.music-volume-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--primary-color, #77B1AD);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}

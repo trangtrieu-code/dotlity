@@ -155,6 +155,7 @@
                         <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
+                <!-- Todo list -->
                 <div id="todoListWrap" class="min-h-[80px]">
                     <div id="todoList" class="flex flex-col gap-2"></div>
                     <div id="todoEmpty" class="flex flex-col items-center justify-center py-6 text-slate-400 text-sm text-center">
@@ -169,18 +170,72 @@
             </div>
         </div>
 
-        <!-- Music - empty shell -->
-        <div id="widgetMusic" class="widget-window glass absolute top-[55%] right-[15%] w-[380px] max-w-[95vw] hidden" data-widget="music">
+        <!-- Music Player -->
+        <div id="widgetMusic" class="widget-window glass absolute top-[55%] right-[15%] w-[420px] max-w-[95vw] hidden" data-widget="music">
             <div class="widget-header">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-500 text-lg">music_note</span>
-                    <span class="text-sm font-semibold">Music</span>
+                    <span class="text-sm font-semibold">Music Player</span>
                 </div>
                 <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="music" type="button" aria-label="Close">
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
-            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+            <!-- Music player body -->
+            <div class="music-player-body p-4 relative">
+                <audio id="musicAudio" preload="metadata"></audio>
+                <!-- Music burger -->
+                <div class="flex justify-start mb-2">
+                    <button type="button" id="musicBurger" class="music-btn-icon p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500" title="Albums" aria-label="Albums">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                </div>
+                <div class="music-track-info text-center mb-3 min-h-[28px]">
+                    <div id="musicTrackTitle" class="text-slate-800 dark:text-slate-100 font-medium">Select an album to start</div>
+                </div>
+                <!-- Music progress -->
+                <div class="music-progress-wrap flex items-center gap-2 mb-4">
+                    <span id="musicTimeCurrent" class="text-xs text-slate-500 min-w-[35px] text-center">0:00</span>
+                    <div id="musicProgressBar" class="music-progress-bar flex-1 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full cursor-pointer relative">
+                        <div id="musicProgressFill" class="music-progress-fill absolute top-0 left-0 h-full rounded-full bg-primary" style="width:0%"></div>
+                    </div>
+                    <span id="musicTimeTotal" class="text-xs text-slate-500 min-w-[35px] text-center">0:00</span>
+                </div>
+                <!-- Music controls -->
+                <div class="music-controls flex items-center justify-center gap-3 mb-4">
+                    <button type="button" id="musicShuffle" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Shuffle" aria-label="Shuffle">
+                        <span class="material-symbols-outlined">shuffle</span>
+                    </button>
+                    <button type="button" id="musicPrev" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Previous" aria-label="Previous">
+                        <span class="material-symbols-outlined">skip_previous</span>
+                    </button>
+                    <button type="button" id="musicPlayPause" class="music-play-btn p-3 rounded-xl bg-primary text-white hover:opacity-90" title="Play/Pause" aria-label="Play/Pause">
+                        <span class="material-symbols-outlined" id="musicPlayIcon">play_arrow</span>
+                    </button>
+                    <button type="button" id="musicNext" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Next" aria-label="Next">
+                        <span class="material-symbols-outlined">skip_next</span>
+                    </button>
+                    <button type="button" id="musicRepeat" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Repeat" aria-label="Repeat">
+                        <span class="material-symbols-outlined" id="musicRepeatIcon">repeat</span>
+                    </button>
+                </div>
+                <!-- Volume slider -->
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 flex-1 max-w-[180px]">
+                        <span class="material-symbols-outlined text-slate-500 text-lg">volume_up</span>
+                        <input type="range" id="musicVolumeSlider" min="0" max="100" value="70" class="music-volume-slider flex-1 h-1.5 accent-primary cursor-pointer">
+                    </div>
+                    <div class="flex items-center gap-1 text-slate-500 text-sm">
+                        <span class="material-symbols-outlined text-lg">list</span>
+                        <span id="musicTrackCount">0</span>
+                    </div>
+                </div>
+                <!-- Album dropdown -->
+                <div id="musicAlbumDropdown" class="music-dropdown absolute left-4 top-14 w-48 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl z-10 flex flex-col max-h-60 overflow-y-auto hidden">
+                    <div class="px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">Albums</div>
+                    <div id="musicAlbumList" class="flex flex-col"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Ambient - empty shell -->
