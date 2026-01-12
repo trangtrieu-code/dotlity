@@ -170,8 +170,8 @@
             </div>
         </div>
 
-        <!-- Music Player -->
-        <div id="widgetMusic" class="widget-window glass absolute top-[55%] right-[15%] w-[420px] max-w-[95vw] hidden" data-widget="music">
+        <!-- Music Player: [Albums panel] [Player] [Playlist panel] -->
+        <div id="widgetMusic" class="widget-window glass absolute top-[55%] right-[15%] hidden music-widget-layout" data-widget="music">
             <div class="widget-header">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-500 text-lg">music_note</span>
@@ -181,59 +181,64 @@
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
-            <!-- Music player body -->
-            <div class="music-player-body p-4 relative">
-                <audio id="musicAudio" preload="metadata"></audio>
-                <!-- Music burger -->
-                <div class="flex justify-start mb-2">
-                    <button type="button" id="musicBurger" class="music-btn-icon p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500" title="Albums" aria-label="Albums">
-                        <span class="material-symbols-outlined">menu</span>
-                    </button>
+            <div class="music-widget-content">
+                <!-- Left: Albums panel -->
+                <div id="musicAlbumPanel" class="music-side-panel music-album-panel">
+                    <div class="music-panel-header">Albums</div>
+                    <div id="musicAlbumList" class="music-panel-content"></div>
                 </div>
-                <div class="music-track-info text-center mb-3 min-h-[28px]">
-                    <div id="musicTrackTitle" class="text-slate-800 dark:text-slate-100 font-medium">Select an album to start</div>
-                </div>
-                <!-- Music progress -->
-                <div class="music-progress-wrap flex items-center gap-2 mb-4">
-                    <span id="musicTimeCurrent" class="text-xs text-slate-500 min-w-[35px] text-center">0:00</span>
-                    <div id="musicProgressBar" class="music-progress-bar flex-1 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full cursor-pointer relative">
-                        <div id="musicProgressFill" class="music-progress-fill absolute top-0 left-0 h-full rounded-full bg-primary" style="width:0%"></div>
+                <!-- Center: Player -->
+                <div class="music-player-body p-4 relative flex-shrink-0">
+                    <audio id="musicAudio" preload="metadata"></audio>
+                    <div class="flex justify-start mb-2">
+                        <button type="button" id="musicBurger" class="music-dropdown-btn" title="Albums" aria-label="Albums">
+                            <span class="material-symbols-outlined">menu</span>
+                        </button>
                     </div>
-                    <span id="musicTimeTotal" class="text-xs text-slate-500 min-w-[35px] text-center">0:00</span>
-                </div>
-                <!-- Music controls -->
-                <div class="music-controls flex items-center justify-center gap-3 mb-4">
-                    <button type="button" id="musicShuffle" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Shuffle" aria-label="Shuffle">
-                        <span class="material-symbols-outlined">shuffle</span>
-                    </button>
-                    <button type="button" id="musicPrev" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Previous" aria-label="Previous">
-                        <span class="material-symbols-outlined">skip_previous</span>
-                    </button>
-                    <button type="button" id="musicPlayPause" class="music-play-btn p-3 rounded-xl bg-primary text-white hover:opacity-90" title="Play/Pause" aria-label="Play/Pause">
-                        <span class="material-symbols-outlined" id="musicPlayIcon">play_arrow</span>
-                    </button>
-                    <button type="button" id="musicNext" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Next" aria-label="Next">
-                        <span class="material-symbols-outlined">skip_next</span>
-                    </button>
-                    <button type="button" id="musicRepeat" class="music-btn-icon p-2 rounded-lg text-slate-500 hover:text-primary" title="Repeat" aria-label="Repeat">
-                        <span class="material-symbols-outlined" id="musicRepeatIcon">repeat</span>
-                    </button>
-                </div>
-                <!-- Volume slider -->
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2 flex-1 max-w-[180px]">
-                        <span class="material-symbols-outlined text-slate-500 text-lg">volume_up</span>
-                        <input type="range" id="musicVolumeSlider" min="0" max="100" value="70" class="music-volume-slider flex-1 h-1.5 accent-primary cursor-pointer">
+                    <div class="music-track-info text-center mb-3 min-h-[28px]">
+                        <div id="musicTrackTitle" class="music-track-title text-slate-800 dark:text-slate-100">Select an album to start</div>
                     </div>
-                    <div class="flex items-center gap-1 text-slate-500 text-sm">
-                        <span class="material-symbols-outlined text-lg">list</span>
-                        <span id="musicTrackCount">0</span>
+                    <div class="music-progress-wrap flex items-center gap-2 mb-4">
+                        <span id="musicTimeCurrent" class="music-time text-xs text-slate-500 min-w-[35px] text-center">0:00</span>
+                        <div id="musicProgressBar" class="music-progress-bar flex-1 max-w-[280px] h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full cursor-pointer relative">
+                            <div id="musicProgressFill" class="music-progress-fill absolute top-0 left-0 h-full rounded-full" style="width:0%"></div>
+                            <div id="musicProgressHandle" class="music-progress-handle absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full cursor-grab pointer-events-none" style="left:0%"></div>
+                        </div>
+                        <span id="musicTimeTotal" class="music-time text-xs text-slate-500 min-w-[35px] text-center">0:00</span>
+                    </div>
+                    <div class="music-controls flex items-center justify-center gap-4 mb-3">
+                        <button type="button" id="musicShuffle" class="music-control-icon" title="Shuffle" aria-label="Shuffle">
+                            <span class="material-symbols-outlined">shuffle</span>
+                        </button>
+                        <button type="button" id="musicPrev" class="music-control-icon" title="Previous" aria-label="Previous">
+                            <span class="material-symbols-outlined">skip_previous</span>
+                        </button>
+                        <button type="button" id="musicPlayPause" class="music-play-pause-btn" title="Play/Pause" aria-label="Play/Pause">
+                            <span class="material-symbols-outlined music-play-icon" style="font-variation-settings: 'FILL' 1">play_arrow</span>
+                            <span class="material-symbols-outlined music-pause-icon hidden" style="font-variation-settings: 'FILL' 1">pause</span>
+                        </button>
+                        <button type="button" id="musicNext" class="music-control-icon" title="Next" aria-label="Next">
+                            <span class="material-symbols-outlined">skip_next</span>
+                        </button>
+                        <button type="button" id="musicRepeat" class="music-control-icon" title="Repeat" aria-label="Repeat">
+                            <span class="material-symbols-outlined music-repeat-icon" id="musicRepeatIcon">repeat</span>
+                        </button>
+                    </div>
+                    <div class="music-bottom flex items-center justify-between gap-2">
+                        <div class="music-volume flex items-center gap-2 flex-1 max-w-[160px]">
+                            <span class="material-symbols-outlined music-volume-icon text-slate-500 text-lg">volume_up</span>
+                            <input type="range" id="musicVolumeSlider" min="0" max="100" value="70" class="music-volume-slider flex-1 h-1">
+                        </div>
+                        <button type="button" id="musicPlaylistBtn" class="music-dropdown-btn flex items-center gap-1" title="Playlist" aria-label="Playlist">
+                            <span class="material-symbols-outlined">list</span>
+                            <span id="musicTrackCount" class="text-xs text-slate-500">0</span>
+                        </button>
                     </div>
                 </div>
-                <!-- Album dropdown -->
-                <div id="musicAlbumDropdown" class="music-dropdown absolute left-4 top-14 w-48 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl z-10 flex flex-col max-h-60 overflow-y-auto hidden">
-                    <div class="px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">Albums</div>
-                    <div id="musicAlbumList" class="flex flex-col"></div>
+                <!-- Right: Playlist panel -->
+                <div id="musicPlaylistPanel" class="music-side-panel music-playlist-panel">
+                    <div class="music-panel-header">Playlist</div>
+                    <div id="musicPlaylistContent" class="music-panel-content"></div>
                 </div>
             </div>
         </div>

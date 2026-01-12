@@ -12,7 +12,6 @@
   const musicProgressBar = document.getElementById('musicProgressBar');
   const musicProgressFill = document.getElementById('musicProgressFill');
   const musicPlayPause = document.getElementById('musicPlayPause');
-  const musicPlayIcon = document.getElementById('musicPlayIcon');
   const musicPrev = document.getElementById('musicPrev');
   const musicNext = document.getElementById('musicNext');
   const musicShuffle = document.getElementById('musicShuffle');
@@ -21,8 +20,14 @@
   const musicVolumeSlider = document.getElementById('musicVolumeSlider');
   const musicTrackCount = document.getElementById('musicTrackCount');
   const musicBurger = document.getElementById('musicBurger');
-  const musicAlbumDropdown = document.getElementById('musicAlbumDropdown');
+  const musicAlbumPanel = document.getElementById('musicAlbumPanel');
   const musicAlbumList = document.getElementById('musicAlbumList');
+  const musicProgressHandle = document.getElementById('musicProgressHandle');
+  const musicPlaylistBtn = document.getElementById('musicPlaylistBtn');
+  const musicPlaylistPanel = document.getElementById('musicPlaylistPanel');
+  const musicPlaylistContent = document.getElementById('musicPlaylistContent');
+  const musicPlayIcon = document.querySelector('.music-play-icon');
+  const musicPauseIcon = document.querySelector('.music-pause-icon');
 
   // Check if DOM refs are available
   if (!audio || !musicProgressBar) return;
@@ -30,6 +35,7 @@
   // Playlist: array of { url, title }
   let playlist = [];
   let currentIndex = 0;
+  let currentAlbumKey = null;
   let repeatMode = 0; // 0 off, 1 one, 2 all
   let shuffleOn = false;
   let albumsData = null;
@@ -56,11 +62,10 @@
       const album = albumsData[key];
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'w-full text-left px-3 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700';
+      btn.className = 'music-dropdown-item' + (currentAlbumKey === key ? ' active' : '');
       btn.textContent = album.name;
       btn.addEventListener('click', function () {
         selectAlbum(key);
-        musicAlbumDropdown.classList.add('hidden');
       });
       musicAlbumList.appendChild(btn);
     });
@@ -70,6 +75,7 @@
   function selectAlbum(albumKey) {
     const album = albumsData && albumsData[albumKey];
     if (!album) return;
+    currentAlbumKey = albumKey;
     const folder = album.folder;
     playlist = (album.tracks || []).map(function (file) {
       const title = file.replace(/\.mp3$/i, '');
@@ -77,12 +83,41 @@
     });
     currentIndex = 0;
     if (musicTrackCount) musicTrackCount.textContent = playlist.length;
+    renderAlbumList();
+    renderPlaylistDropdown();
     if (playlist.length > 0) {
       if (musicTrackTitle) musicTrackTitle.textContent = playlist[0].title;
       loadTrack(0);
     } else {
       if (musicTrackTitle) musicTrackTitle.textContent = 'No tracks';
     }
+  }
+
+  // Render playlist list (current album tracks) in the right-hand Playlist panel
+  function renderPlaylistDropdown() {
+    if (!musicPlaylistContent) return;
+    musicPlaylistContent.innerHTML = '';
+    if (playlist.length === 0) {
+      const placeholder = document.createElement('p');
+      placeholder.className = 'music-panel-placeholder';
+      placeholder.textContent = 'Select an album to see tracks';
+      musicPlaylistContent.appendChild(placeholder);
+      return;
+    }
+    playlist.forEach(function (track, i) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'music-dropdown-item' + (i === currentIndex ? ' active' : '');
+      btn.textContent = track.title;
+      btn.addEventListener('click', function () {
+        loadTrack(i);
+        audio.play();
+        if (musicPlayIcon) musicPlayIcon.classList.add('hidden');
+        if (musicPauseIcon) musicPauseIcon.classList.remove('hidden');
+        renderPlaylistDropdown();
+      });
+      musicPlaylistContent.appendChild(btn);
+    });
   }
 
   // Load track
@@ -93,6 +128,7 @@
     audio.src = track.url;
     if (musicTrackTitle) musicTrackTitle.textContent = track.title;
     audio.load();
+    if (musicPlaylistContent) renderPlaylistDropdown();
   }
 
   // Format time
@@ -109,19 +145,22 @@
     if (musicTimeTotal) musicTimeTotal.textContent = formatTime(audio.duration);
     const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
     if (musicProgressFill) musicProgressFill.style.width = pct + '%';
+    if (musicProgressHandle) musicProgressHandle.style.left = pct + '%';
   }
 
-  // Play / pause / prev / next
+  // Play 
   function play() {
     if (playlist.length === 0) return;
     audio.play();
-    if (musicPlayIcon) musicPlayIcon.textContent = 'pause';
+    if (musicPlayIcon) musicPlayIcon.classList.add('hidden');
+    if (musicPauseIcon) musicPauseIcon.classList.remove('hidden');
   }
 
   // Pause
   function pause() {
     audio.pause();
-    if (musicPlayIcon) musicPlayIcon.textContent = 'play_arrow';
+    if (musicPlayIcon) musicPlayIcon.classList.remove('hidden');
+    if (musicPauseIcon) musicPauseIcon.classList.add('hidden');
   }
 
   // Toggle play/pause
@@ -148,11 +187,13 @@
     if (nextIdx < playlist.length) {
       loadTrack(nextIdx);
       audio.play();
-      if (musicPlayIcon) musicPlayIcon.textContent = 'pause';
+      if (musicPlayIcon) musicPlayIcon.classList.add('hidden');
+      if (musicPauseIcon) musicPauseIcon.classList.remove('hidden');
     } else if (repeatMode === 2) {
       loadTrack(0);
       audio.play();
-      if (musicPlayIcon) musicPlayIcon.textContent = 'pause';
+      if (musicPlayIcon) musicPlayIcon.classList.add('hidden');
+      if (musicPauseIcon) musicPauseIcon.classList.remove('hidden');
     } else {
       pause();
     }
@@ -168,7 +209,8 @@
     if (prevIdx >= 0) {
       loadTrack(prevIdx);
       audio.play();
-      if (musicPlayIcon) musicPlayIcon.textContent = 'pause';
+      if (musicPlayIcon) musicPlayIcon.classList.add('hidden');
+      if (musicPauseIcon) musicPauseIcon.classList.remove('hidden');
     } else {
       audio.currentTime = 0;
     }
@@ -191,7 +233,7 @@
     audio.volume = val / 100;
   }
 
-  // Shuffle / repeat
+  // Shuffle
   function toggleShuffle() {
     shuffleOn = !shuffleOn;
     if (shuffleOn && playlist.length > 1) {
@@ -206,7 +248,7 @@
       playlist = [current].concat(rest);
       currentIndex = 0;
     }
-    musicShuffle.classList.toggle('text-primary', shuffleOn);
+    if (musicShuffle) musicShuffle.classList.toggle('active', shuffleOn);
   }
 
   // Toggle repeat
@@ -215,7 +257,7 @@
     if (musicRepeatIcon) {
       musicRepeatIcon.textContent = repeatMode === 1 ? 'repeat_one' : 'repeat';
     }
-    musicRepeat.classList.toggle('text-primary', repeatMode > 0);
+    if (musicRepeat) musicRepeat.classList.toggle('active', repeatMode > 0);
   }
 
   // Wire events
@@ -227,10 +269,17 @@
   if (musicVolumeSlider) musicVolumeSlider.addEventListener('input', setVolume);
   if (musicProgressBar) musicProgressBar.addEventListener('click', seekTo);
 
-  // Burger menu
-  if (musicBurger) {
+  // Burger menu: toggle Albums panel (left)
+  if (musicBurger && musicAlbumPanel) {
     musicBurger.addEventListener('click', function () {
-      musicAlbumDropdown.classList.toggle('hidden');
+      musicAlbumPanel.classList.toggle('visible');
+    });
+  }
+
+  // Playlist button: toggle Playlist panel (right)
+  if (musicPlaylistBtn && musicPlaylistPanel) {
+    musicPlaylistBtn.addEventListener('click', function () {
+      musicPlaylistPanel.classList.toggle('visible');
     });
   }
 
@@ -244,4 +293,5 @@
   // Initial setup
   setVolume();
   loadAlbums();
+  renderPlaylistDropdown(); /* show "Select an album" in Playlist panel */
 })();
