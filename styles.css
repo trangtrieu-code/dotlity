@@ -447,3 +447,94 @@ body {
   background: rgba(114, 211, 196, 0.2);
   color: #72D3C4;
 }
+
+/* ========== Ambient Sounds ========== */
+.ambient-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.ambient-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ambient-icon-wrap {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.ambient-icon-wrap:hover {
+  transform: scale(1.1);
+}
+
+.ambient-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+  display: block;
+}
+
+.ambient-icon.muted {
+  filter: opacity(0.25);
+}
+
+.ambient-icon.low {
+  filter: opacity(0.45);
+}
+
+.ambient-icon.medium {
+  filter: opacity(0.65);
+}
+
+.ambient-icon.max {
+  filter: none;
+}
+
+.dark .ambient-icon {
+  filter: invert(1);
+}
+
+.dark .ambient-icon.muted {
+  filter: invert(1) opacity(0.25);
+}
+
+.dark .ambient-icon.low {
+  filter: invert(1) opacity(0.45);
+}
+
+.dark .ambient-icon.medium {
+  filter: invert(1) opacity(0.65);
+}
+
+.dark .ambient-icon.max {
+  filter: invert(1);
+}
+
+.ambient-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+.dark .ambient-label {
+  color: #94a3b8;
+}
+
+@media (max-width: 400px) {
+  .ambient-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
