@@ -1,7 +1,17 @@
 (function () {
+  // Constants
   const STORAGE_THEME = 'dotlity-theme';
+  const STORAGE_USER_NAME = 'dotlity-userName';
 
-  // ----- Theme: apply saved preference on load (skip if custom background is used later) -----
+  // DOM refs
+  const settingsBtn = document.getElementById('appSettingsBtn');
+  const settingsModal = document.getElementById('settingsModal');
+  const settingsClose = document.getElementById('settingsClose');
+  const settingsSave = document.getElementById('settingsSave');
+  const settingsUserName = document.getElementById('settingsUserName');
+  const settingsBackdrop = settingsModal ? settingsModal.querySelector('.settings-backdrop') : null;
+
+  // Theme: apply saved preference on load (skip if custom background is used later)
   const html = document.documentElement;
   const savedTheme = localStorage.getItem(STORAGE_THEME);
   if (savedTheme === 'dark') {
@@ -10,7 +20,7 @@
     html.classList.remove('dark');
   }
 
-  // ----- Theme toggle: click to switch light/dark and persist -----
+  // Theme toggle: click to switch light/dark and persist
   const themeToggle = document.getElementById('themeToggle');
   if (themeToggle) {
     themeToggle.addEventListener('click', function () {
@@ -20,14 +30,14 @@
     });
   }
 
-  // ----- Helper: turn "notes" into "widgetNotes" so we can find the panel in the HTML -----
+  // Helper: turn "notes" into "widgetNotes" so we can find the panel in the HTML
   function getWidgetId(widgetName) {
     const firstLetter = widgetName.charAt(0).toUpperCase();
     const rest = widgetName.slice(1);
     return 'widget' + firstLetter + rest;
   }
 
-  // ----- Helper: set nav button active if its panel is visible, inactive if hidden -----
+  // Helper: set nav button active if its panel is visible, inactive if hidden
   function setNavActive(widgetName) {
     const panelId = getWidgetId(widgetName);
     const panel = document.getElementById(panelId);
@@ -40,7 +50,7 @@
     }
   }
 
-  // ----- Nav bar: when you click a widget button, show or hide that panel -----
+  // Nav bar: when you click a widget button, show or hide that panel
   const navButtons = document.querySelectorAll('.nav-widget');
   navButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -54,7 +64,7 @@
     });
   });
 
-  // ----- Close button on each widget: hide that panel -----
+  // Close button on each widget: hide that panel
   const closeButtons = document.querySelectorAll('.widget-close');
   closeButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -68,7 +78,7 @@
     });
   });
 
-  // ----- Dragging: drag a widget by its header to move it -----
+  // Dragging: drag a widget by its header to move it
   const main = document.querySelector('main');
   if (main) {
     const headers = document.querySelectorAll('.widget-header');
@@ -114,11 +124,36 @@
     });
   }
 
-  // ----- Settings button: will open settings modal later -----
-  const settingsBtn = document.getElementById('appSettingsBtn');
-  if (settingsBtn) {
-    settingsBtn.addEventListener('click', function () {
-      // TODO: open settings modal
-    });
+
+
+  function openSettings() {
+    if (!settingsModal) return;
+    if (settingsUserName) {
+      settingsUserName.value = localStorage.getItem(STORAGE_USER_NAME) || '';
+    }
+    settingsModal.classList.remove('hidden');
+    settingsModal.setAttribute('aria-hidden', 'false');
   }
+
+  function closeSettings() {
+    if (!settingsModal) return;
+    settingsModal.classList.add('hidden');
+    settingsModal.setAttribute('aria-hidden', 'true');
+  }
+
+  function saveSettings() {
+    const name = settingsUserName ? settingsUserName.value.trim() : '';
+    if (typeof localStorage !== 'undefined') {
+      if (name) localStorage.setItem(STORAGE_USER_NAME, name);
+      else localStorage.removeItem(STORAGE_USER_NAME);
+    }
+    closeSettings();
+    // Greeting updates on next updateTime() tick (every 1s), or dispatch so time-weather can refresh once
+    document.dispatchEvent(new CustomEvent('dotlity-settings-saved'));
+  }
+
+  if (settingsBtn) settingsBtn.addEventListener('click', openSettings);
+  if (settingsClose) settingsClose.addEventListener('click', closeSettings);
+  if (settingsSave) settingsSave.addEventListener('click', saveSettings);
+  if (settingsBackdrop) settingsBackdrop.addEventListener('click', closeSettings);
 })();

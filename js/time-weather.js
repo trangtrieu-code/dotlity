@@ -41,13 +41,18 @@
     return isDay ? 'wb_sunny' : 'nightlight_round';       // clear: sun or moon
   }
 
+  const STORAGE_USER_NAME = 'dotlity-userName';
+
   /** 0–11 Morning, 12–17 Afternoon, 18–23 Evening */
   function getGreeting(timezone) {
     const formatter = new Intl.DateTimeFormat('en-US', { timeZone: timezone, hour: 'numeric', hour12: false });
     const hour = parseInt(formatter.format(new Date()), 10);
-    if (hour >= 12 && hour < 18) return 'Good Afternoon';
-    if (hour >= 18) return 'Good Evening';
-    return 'Good Morning';
+    let base = 'Good Morning';
+    if (hour >= 12 && hour < 18) base = 'Good Afternoon';
+    else if (hour >= 18) base = 'Good Evening';
+    const name = (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_USER_NAME)) || '';
+    const trimmed = name.trim();
+    return trimmed ? base + ', ' + trimmed : base;
   }
 
   // Live local time — update every second
@@ -62,6 +67,7 @@
   }
   updateTime(); // Run once immediately
   setInterval(updateTime, 1000); // Then update every 1000ms (1 second)
+  document.addEventListener('dotlity-settings-saved', updateTime); // Update greeting as soon as name is saved
 
   // Weather from Open-Meteo (need lat/lon from IP)
   // async/await lets us wait for API responses without blocking the page

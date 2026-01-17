@@ -1,3 +1,9 @@
+/* ========== Base & theme ========== */
+:root {
+  --primary-color: #77B1AD;
+  --primary-color-dark: #72D3C4; /* used in dark mode for better contrast */
+}
+
 /* ========== Glass ========== */
 .glass {
   background: rgba(255, 255, 255, 0.85);
@@ -13,15 +19,42 @@
 
 /* ========== Body ========== */
 body {
-  background-color: #f1f3f4;
-  background-image: radial-gradient(circle, #c4c4c4 1px, transparent 1px);
+  background: #F3F4F6;
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 .dark body {
-  background-color: #121212;
-  background-image: radial-gradient(circle, #2a2a2a 1px, transparent 1px);
+  background: #0f172a;
+  background-image: radial-gradient(#1e293b 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* ========== Header: time & weather font and size ========== */
+.header-greeting {
+  font-family: "Outfit", sans-serif;
+  font-size: 1.875rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.header-time-weather {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.dark .header-time-weather {
+  color: #94a3b8;
+}
+
+.header-time-weather .header-weather-icon {
+  color: #f59e0b;
+}
+
+.dark .header-time-weather .header-weather-icon {
+  color: #fbbf24;
 }
 
 /* ========== Widget windows ========== */
@@ -83,21 +116,75 @@ body {
   position: relative;
 }
 
+/* ========== Settings modal ========== */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.settings-overlay:not(.hidden) {
+  display: flex;
+}
+
+.settings-overlay.hidden {
+  display: none !important;
+}
+
+.settings-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.settings-box {
+  position: relative;
+}
+
+.settings-header {
+  background: #fff;
+}
+
+.dark .settings-header {
+  background: #1e293b;
+}
+
+.settings-footer {
+  padding-top: 0;
+}
+
 /* ========== Nav: active state when widget is open ========== */
 .nav-widget.active {
-  background: #e2e8f0;
-  color: #475569;
+  background: rgba(0, 254, 255, 0.15);
+  color: #00feff;
 }
 
 .dark .nav-widget.active {
-  background: #334155;
-  color: #94a3b8;
+  background: rgba(0, 254, 255, 0.15);
+  color: #00feff;
 }
 
 /* ========== Todo widget ========== */
 #todoListWrap {
   max-height: 240px;
   overflow-y: auto;
+}
+
+.todo-add-btn {
+  background: #00feff;
+}
+
+.todo-add-btn:hover {
+  background: #00e5e6;
+  box-shadow: 0 0 12px rgba(0, 254, 255, 0.5);
+}
+
+.todo-check-done .material-symbols-outlined {
+  color: #00feff;
 }
 
 .todo-item .todo-edit-input {
@@ -189,12 +276,12 @@ body {
 
 .music-progress-fill,
 .music-progress-bar .music-progress-handle {
-  background: #77B1AD;
+  background: #00feff;
 }
 
 .dark .music-progress-fill,
 .dark .music-progress-bar .music-progress-handle {
-  background: #72D3C4;
+  background: #00feff;
 }
 
 .music-progress-bar:hover .music-progress-handle {
@@ -207,8 +294,8 @@ body {
 }
 
 .music-play-pause-btn {
-  background: #77B1AD;
-  color: #fff;
+  background: #00feff;
+  color: #0f172a;
   border: none;
   border-radius: 8px;
   width: 52px;
@@ -217,12 +304,13 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
 }
 
 .music-play-pause-btn:hover {
-  background: #659d99;
+  background: #00e5e6;
   transform: scale(1.05);
+  box-shadow: 0 0 16px rgba(0, 254, 255, 0.6);
 }
 
 .music-play-pause-btn .material-symbols-outlined {
@@ -243,12 +331,12 @@ body {
 
 .music-control-icon:hover,
 .music-control-icon.active {
-  color: #77B1AD;
+  color: #00feff;
 }
 
 .dark .music-control-icon:hover,
 .dark .music-control-icon.active {
-  color: #72D3C4;
+  color: #00feff;
 }
 
 .music-control-icon .material-symbols-outlined {
@@ -295,7 +383,7 @@ body {
   -webkit-appearance: none;
   width: 10px;
   height: 10px;
-  background: #77B1AD;
+  background: #00feff;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -303,18 +391,18 @@ body {
 .music-volume-slider::-moz-range-thumb {
   width: 10px;
   height: 10px;
-  background: #77B1AD;
+  background: #00feff;
   border-radius: 50%;
   cursor: pointer;
   border: none;
 }
 
 .dark .music-volume-slider::-webkit-slider-thumb {
-  background: #72D3C4;
+  background: #00feff;
 }
 
 .dark .music-volume-slider::-moz-range-thumb {
-  background: #72D3C4;
+  background: #00feff;
 }
 
 /* Music widget: center player with Albums left / Playlist right panels */
@@ -438,14 +526,14 @@ body {
 }
 
 .music-dropdown-item.active {
-  background: #e8f5f4;
-  color: #77B1AD;
+  background: #2d545e;
+  color: #00feff;
   font-weight: 500;
 }
 
 .dark .music-dropdown-item.active {
-  background: rgba(114, 211, 196, 0.2);
-  color: #72D3C4;
+  background: #2d545e;
+  color: #00feff;
 }
 
 /* ========== Ambient Sounds ========== */

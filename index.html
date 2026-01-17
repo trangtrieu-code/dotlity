@@ -33,17 +33,21 @@
 </head>
 <body class="min-h-screen font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
     <!-- Fixed header stays at top while scrolling -->
-    <header class="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4">
-        <div>
-            <div id="headerGreeting" class="text-xl font-display font-semibold">Hello</div>
-            <div class="flex items-center gap-3 mt-1">
-                <span class="material-symbols-outlined text-lg" aria-hidden="true">schedule</span>
-                <span id="headerTime">--:--</span>
-                <span class="material-symbols-outlined text-lg" id="headerWeatherIcon" aria-hidden="true">wb_sunny</span>
-                <span id="headerWeatherText">--°C</span>
+    <header class="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6">
+        <div class="space-y-1">
+            <h1 id="headerGreeting" class="header-greeting text-slate-800 dark:text-slate-100">Hello</h1>
+            <div id="headerTimeWeatherWrap" class="header-time-weather flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[1.125rem]" aria-hidden="true">schedule</span>
+                    <span id="headerTime">--:--</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="material-symbols-outlined header-weather-icon text-[1.125rem]" id="headerWeatherIcon" aria-hidden="true">wb_sunny</span>
+                    <span id="headerWeatherText">--°C</span>
+                </div>
             </div>
         </div>
-        <button id="themeToggle" type="button" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+        <button id="themeToggle" type="button" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
             <span class="material-symbols-outlined">dark_mode</span>
         </button>
     </header>
@@ -135,6 +139,27 @@
             </div>
         </div>
 
+        <!-- Settings modal -->
+        <div id="settingsModal" class="settings-overlay hidden" aria-hidden="true">
+            <div class="settings-backdrop"></div>
+            <div class="settings-box glass rounded-xl shadow-2xl max-w-sm w-full mx-4 overflow-hidden">
+                <div class="settings-header flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700">
+                    <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Settings</h2>
+                    <button type="button" id="settingsClose" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Close">
+                        <span class="material-symbols-outlined text-xl">close</span>
+                    </button>
+                </div>
+                <div class="settings-body px-4 py-4">
+                    <label for="settingsUserName" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Your name</label>
+                    <input type="text" id="settingsUserName" class="settings-input w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="Your name" maxlength="64" />
+                    <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Used in the greeting (e.g. Good evening, Alex).</p>
+                </div>
+                <div class="settings-footer px-4 pb-4 pt-0">
+                    <button type="button" id="settingsSave" class="w-full py-2.5 rounded-lg bg-primary hover:opacity-90 text-white font-medium text-sm transition-opacity">Save</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Todo -->
         <div id="widgetTodo" class="widget-window glass absolute bottom-[25%] left-[10%] w-72 hidden" data-widget="todo">
             <div class="widget-header">
@@ -151,7 +176,7 @@
             <div class="p-4">
                 <div class="flex gap-2 mb-4">
                     <input id="todoInput" class="todo-input flex-1 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" type="text" placeholder="Add a task..." maxlength="256" />
-                    <button id="todoAddBtn" class="todo-add-btn flex-shrink-0 p-2 rounded-lg bg-[#72D3C4] text-white hover:opacity-90 transition-opacity" type="button" aria-label="Add task">
+                    <button id="todoAddBtn" class="todo-add-btn flex-shrink-0 p-2 rounded-lg text-white hover:opacity-90 transition-opacity" type="button" aria-label="Add task">
                         <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
