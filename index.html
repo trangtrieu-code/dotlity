@@ -52,18 +52,46 @@
         </button>
     </header>
     <main class="relative w-full h-screen p-20">
-        <!-- Focus (Pomodoro) - empty shell -->
+        <!-- Focus (Pomodoro) -->
         <div id="widgetFocus" class="widget-window glass absolute top-[15%] left-[30%] w-[420px] max-w-[95vw] hidden" data-widget="focus">
             <div class="widget-header">
                 <div class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-500 text-lg">timer</span>
-                    <span class="text-sm font-semibold">Focus</span>
+                    <span class="text-sm font-semibold">Pomodoro</span>
                 </div>
                 <button class="widget-close text-slate-400 hover:text-red-500 transition-colors" data-widget="focus" type="button" aria-label="Close">
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
-            <div class="p-4 text-slate-500 text-sm">Widget content goes here.</div>
+            <div class="pomodoro-body p-5">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-slate-500 dark:text-slate-400">Sessions: <span id="pomodoroSessionCount">0</span></span>
+                </div>
+                <div class="flex justify-center mb-4">
+                    <span id="pomodoroPhaseLabel" class="pomodoro-phase-pill">Focus Session</span>
+                </div>
+                <div class="pomodoro-timer-wrap text-center mb-4">
+                    <div id="pomodoroDisplay" class="pomodoro-timer-text font-display font-bold text-slate-800 dark:text-slate-100">25:00</div>
+                    <div class="pomodoro-progress-wrap h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mb-3">
+                        <div id="pomodoroProgressBar" class="pomodoro-progress-fill h-full rounded-full transition-all duration-300" style="width:100%"></div>
+                    </div>
+                    <div id="pomodoroStatus" class="text-sm text-slate-500 dark:text-slate-400">Ready to focus</div>
+                </div>
+                <div class="flex justify-center gap-3">
+                    <button type="button" id="pomodoroPlayPause" class="pomodoro-btn pomodoro-btn-play" title="Play / Pause" aria-label="Play / Pause">
+                        <span class="material-symbols-outlined" id="pomodoroPlayIcon">play_arrow</span>
+                    </button>
+                    <button type="button" id="pomodoroReset" class="pomodoro-btn pomodoro-btn-secondary" title="Reset">
+                        <span class="material-symbols-outlined">replay</span>
+                    </button>
+                    <button type="button" id="pomodoroStop" class="pomodoro-btn pomodoro-btn-secondary" title="Stop">
+                        <span class="material-symbols-outlined">stop</span>
+                    </button>
+                    <button type="button" id="pomodoroSkip" class="pomodoro-btn pomodoro-btn-secondary" title="Skip">
+                        <span class="material-symbols-outlined">skip_next</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Notes -->

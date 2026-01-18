@@ -94,6 +94,111 @@ body.custom-bg {
   display: none !important;
 }
 
+/* ========== Pomodoro widget ========== */
+.pomodoro-body {
+  background: #fff;
+}
+
+.dark .pomodoro-body {
+  background: #1e293b;
+}
+
+.pomodoro-phase-pill {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+.dark .pomodoro-phase-pill {
+  background: rgba(127, 29, 29, 0.4);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: #fca5a5;
+}
+
+.pomodoro-timer-wrap {
+  min-height: 4rem;
+}
+
+.pomodoro-timer-text {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.pomodoro-progress-fill {
+  background: var(--primary-color);
+}
+
+.dark .pomodoro-progress-fill {
+  background: var(--primary-color-dark);
+}
+
+.pomodoro-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.pomodoro-btn:active {
+  transform: scale(0.96);
+}
+
+.pomodoro-btn-play {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.pomodoro-btn-play:hover {
+  background: #3dbdb5;
+  border-color: #3dbdb5;
+}
+
+.dark .pomodoro-btn-play {
+  background: var(--primary-color-dark);
+  border-color: var(--primary-color-dark);
+}
+
+.dark .pomodoro-btn-play:hover {
+  background: #6ef0e8;
+  border-color: #6ef0e8;
+}
+
+.pomodoro-btn-secondary {
+  background: #fff;
+  color: #334155;
+}
+
+.pomodoro-btn-secondary:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.dark .pomodoro-btn-secondary {
+  background: #334155;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+.dark .pomodoro-btn-secondary:hover {
+  background: #475569;
+  border-color: #64748b;
+}
+
+.pomodoro-btn .material-symbols-outlined {
+  font-size: 1.5rem;
+}
+
 /* ========== Confirm modal ========== */
 .confirm-overlay {
   position: fixed;

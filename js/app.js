@@ -130,11 +130,12 @@
   }
 
 
-
+  // Settings modal: save, restore, and apply custom background
   var settingsSnapshot = { customBg: false, bgImage: null, name: '' };
   var draftCustomBg = false;
   var draftBgImage = null;
 
+  // Helper: apply custom background to body
   function applyToBodyOnly(url) {
     var body = document.body;
     if (!url) {
@@ -146,6 +147,7 @@
     body.style.backgroundImage = 'url("' + url + '")';
   }
 
+  // Helper: restore custom background from snapshot
   function restoreSnapshot() {
     if (settingsSnapshot.customBg && settingsSnapshot.bgImage) {
       applyToBodyOnly(settingsSnapshot.bgImage);
@@ -154,6 +156,7 @@
     }
   }
 
+  // Helper: set custom background from checkbox
   function setCustomBgFromCheckbox() {
     if (!settingsCustomBg) return;
     draftCustomBg = settingsCustomBg.checked;
@@ -162,6 +165,7 @@
     }
   }
 
+  // Helper: load new background
   function loadNewBackground() {
     if (!settingsNewBgBtn) return;
     settingsNewBgBtn.disabled = true;
@@ -183,6 +187,7 @@
     img.src = url;
   }
 
+  // Helper: open settings modal
   function openSettings() {
     if (!settingsModal) return;
     try {
@@ -198,6 +203,7 @@
     settingsModal.setAttribute('aria-hidden', 'false');
   }
 
+  // clise settings modal
   function closeSettings(restore) {
     if (!settingsModal) return;
     if (restore !== false) restoreSnapshot();
@@ -205,6 +211,7 @@
     settingsModal.setAttribute('aria-hidden', 'true');
   }
 
+  // save settings
   function saveSettings() {
     var name = settingsUserName ? settingsUserName.value.trim() : '';
     try {
@@ -225,6 +232,7 @@
   if (settingsNewBgBtn) settingsNewBgBtn.addEventListener('click', loadNewBackground);
   if (settingsCustomBg) settingsCustomBg.addEventListener('change', setCustomBgFromCheckbox);
 
+  // apply custom background from localStorage
   (function () {
     try {
       var useCustom = localStorage.getItem(STORAGE_CUSTOM_BG) === 'true';
