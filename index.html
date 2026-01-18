@@ -17,7 +17,7 @@
         theme: {
           extend: {
             colors: {
-              primary: "#77B1AD",
+              primary: "#4ecdc4",
               "background-light": "#F8F9FA",
               "background-dark": "#121212",
             },
@@ -33,7 +33,7 @@
 </head>
 <body class="min-h-screen font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
     <!-- Fixed header stays at top while scrolling -->
-    <header class="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6">
+    <header class="fixed top-0 left-0 right-0 z-[9] flex items-center justify-between px-8 py-6">
         <div class="space-y-1">
             <h1 id="headerGreeting" class="header-greeting text-slate-800 dark:text-slate-100">Hello</h1>
             <div id="headerTimeWeatherWrap" class="header-time-weather flex items-center gap-4">
@@ -149,10 +149,22 @@
                         <span class="material-symbols-outlined text-xl">close</span>
                     </button>
                 </div>
+                <!-- Settings name input and new background button -->
                 <div class="settings-body px-4 py-4">
                     <label for="settingsUserName" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Your name</label>
                     <input type="text" id="settingsUserName" class="settings-input w-full px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="Your name" maxlength="64" />
                     <p class="mt-1.5 text-xs text-slate-500 dark:text-slate-400">Used in the greeting (e.g. Good evening, Alex).</p>
+                    <!-- Custom background option -->
+                    <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="settingsCustomBg" class="rounded border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 focus:ring-slate-400" />
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-200">Custom background</span>
+                        </label>
+                        <button type="button" id="settingsNewBgBtn" class="mt-3 w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2" aria-label="New background">
+                            <span class="material-symbols-outlined text-lg">image</span>
+                            New background
+                        </button>
+                    </div>
                 </div>
                 <div class="settings-footer px-4 pb-4 pt-0">
                     <button type="button" id="settingsSave" class="w-full py-2.5 rounded-lg bg-primary hover:opacity-90 text-white font-medium text-sm transition-opacity">Save</button>

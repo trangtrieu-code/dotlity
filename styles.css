@@ -1,7 +1,7 @@
 /* ========== Base & theme ========== */
 :root {
-  --primary-color: #77B1AD;
-  --primary-color-dark: #72D3C4; /* used in dark mode for better contrast */
+  --primary-color: #4ecdc4;
+  --primary-color-dark: #5ee7df;
 }
 
 /* ========== Glass ========== */
@@ -28,6 +28,12 @@ body {
   background: #0f172a;
   background-image: radial-gradient(#1e293b 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+body.custom-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* ========== Header: time & weather font and size ========== */
@@ -59,6 +65,7 @@ body {
 
 /* ========== Widget windows ========== */
 .widget-window {
+  z-index: 11;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   border-radius: 12px;
   overflow: hidden;
@@ -159,13 +166,13 @@ body {
 
 /* ========== Nav: active state when widget is open ========== */
 .nav-widget.active {
-  background: rgba(0, 254, 255, 0.15);
-  color: #00feff;
+  background: rgba(78, 205, 196, 0.2);
+  color: #4ecdc4;
 }
 
 .dark .nav-widget.active {
-  background: rgba(0, 254, 255, 0.15);
-  color: #00feff;
+  background: rgba(78, 205, 196, 0.2);
+  color: #5ee7df;
 }
 
 /* ========== Todo widget ========== */
@@ -175,16 +182,15 @@ body {
 }
 
 .todo-add-btn {
-  background: #00feff;
+  background: #4ecdc4;
 }
 
 .todo-add-btn:hover {
-  background: #00e5e6;
-  box-shadow: 0 0 12px rgba(0, 254, 255, 0.5);
+  background: #3db8b0;
 }
 
 .todo-check-done .material-symbols-outlined {
-  color: #00feff;
+  color: #4ecdc4;
 }
 
 .todo-item .todo-edit-input {
@@ -276,12 +282,12 @@ body {
 
 .music-progress-fill,
 .music-progress-bar .music-progress-handle {
-  background: #00feff;
+  background: #4ecdc4;
 }
 
 .dark .music-progress-fill,
 .dark .music-progress-bar .music-progress-handle {
-  background: #00feff;
+  background: #5ee7df;
 }
 
 .music-progress-bar:hover .music-progress-handle {
@@ -294,8 +300,8 @@ body {
 }
 
 .music-play-pause-btn {
-  background: #00feff;
-  color: #0f172a;
+  background: #4ecdc4;
+  color: #fff;
   border: none;
   border-radius: 8px;
   width: 52px;
@@ -304,13 +310,12 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .music-play-pause-btn:hover {
-  background: #00e5e6;
+  background: #3db8b0;
   transform: scale(1.05);
-  box-shadow: 0 0 16px rgba(0, 254, 255, 0.6);
 }
 
 .music-play-pause-btn .material-symbols-outlined {
@@ -331,12 +336,12 @@ body {
 
 .music-control-icon:hover,
 .music-control-icon.active {
-  color: #00feff;
+  color: #4ecdc4;
 }
 
 .dark .music-control-icon:hover,
 .dark .music-control-icon.active {
-  color: #00feff;
+  color: #5ee7df;
 }
 
 .music-control-icon .material-symbols-outlined {
@@ -383,7 +388,7 @@ body {
   -webkit-appearance: none;
   width: 10px;
   height: 10px;
-  background: #00feff;
+  background: #4ecdc4;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -391,18 +396,18 @@ body {
 .music-volume-slider::-moz-range-thumb {
   width: 10px;
   height: 10px;
-  background: #00feff;
+  background: #4ecdc4;
   border-radius: 50%;
   cursor: pointer;
   border: none;
 }
 
 .dark .music-volume-slider::-webkit-slider-thumb {
-  background: #00feff;
+  background: #5ee7df;
 }
 
 .dark .music-volume-slider::-moz-range-thumb {
-  background: #00feff;
+  background: #5ee7df;
 }
 
 /* Music widget: center player with Albums left / Playlist right panels */
@@ -526,14 +531,14 @@ body {
 }
 
 .music-dropdown-item.active {
-  background: #2d545e;
-  color: #00feff;
+  background: #e8f5f4;
+  color: #4ecdc4;
   font-weight: 500;
 }
 
 .dark .music-dropdown-item.active {
-  background: #2d545e;
-  color: #00feff;
+  background: rgba(94, 231, 223, 0.2);
+  color: #5ee7df;
 }
 
 /* ========== Ambient Sounds ========== */

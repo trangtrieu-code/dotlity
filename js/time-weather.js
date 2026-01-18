@@ -1,5 +1,9 @@
 // IIFE: wraps code so variables don't pollute global scope
 (function () {
+  // Constants
+  const STORAGE_USER_NAME = 'dotlity-userName';
+
+  // DOM refs
   const headerTime = document.getElementById('headerTime');
   const headerGreeting = document.getElementById('headerGreeting');
   const headerWeatherText = document.getElementById('headerWeatherText');
@@ -41,7 +45,7 @@
     return isDay ? 'wb_sunny' : 'nightlight_round';       // clear: sun or moon
   }
 
-  const STORAGE_USER_NAME = 'dotlity-userName';
+
 
   /** 0–11 Morning, 12–17 Afternoon, 18–23 Evening */
   function getGreeting(timezone) {

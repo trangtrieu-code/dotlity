@@ -58,7 +58,7 @@
       // Checkbox
       const check = document.createElement('button');
       check.type = 'button';
-      check.className = 'todo-check flex-shrink-0 p-0.5 rounded text-slate-400 hover:text-[#00feff] focus:outline-none focus:ring-2 focus:ring-[#00feff]' + (task.done ? ' todo-check-done' : '');
+      check.className = 'todo-check flex-shrink-0 p-0.5 rounded text-slate-400 hover:text-[#4ecdc4] focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]' + (task.done ? ' todo-check-done' : '');
       check.setAttribute('aria-label', task.done ? 'Mark incomplete' : 'Mark complete');
       check.innerHTML = task.done
         ? '<span class="material-symbols-outlined text-lg" style="font-variation-settings:\'FILL\' 1">check_circle</span>'
