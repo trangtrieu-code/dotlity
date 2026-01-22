@@ -131,13 +131,13 @@
 
 
   // Settings modal: save, restore, and apply custom background
-  var settingsSnapshot = { customBg: false, bgImage: null, name: '' };
-  var draftCustomBg = false;
-  var draftBgImage = null;
+  const settingsSnapshot = { customBg: false, bgImage: null, name: '' };
+  let draftCustomBg = false;
+  let draftBgImage = null;
 
   // Helper: apply custom background to body
   function applyToBodyOnly(url) {
-    var body = document.body;
+    const body = document.body;
     if (!url) {
       body.classList.remove('custom-bg');
       body.style.backgroundImage = '';
@@ -170,8 +170,8 @@
     if (!settingsNewBgBtn) return;
     settingsNewBgBtn.disabled = true;
     settingsNewBgBtn.textContent = 'Loading…';
-    var img = new Image();
-    var url = PICSUM_BASE + '/1920/1080?random=' + Date.now();
+    const img = new Image();
+    const url = PICSUM_BASE + '/1920/1080?random=' + Date.now();
     img.onload = function () {
       draftBgImage = url;
       draftCustomBg = true;
@@ -213,7 +213,7 @@
 
   // save settings
   function saveSettings() {
-    var name = settingsUserName ? settingsUserName.value.trim() : '';
+    const name = settingsUserName ? settingsUserName.value.trim() : '';
     try {
       if (name) localStorage.setItem(STORAGE_USER_NAME, name);
       else localStorage.removeItem(STORAGE_USER_NAME);
@@ -235,8 +235,8 @@
   // apply custom background from localStorage
   (function () {
     try {
-      var useCustom = localStorage.getItem(STORAGE_CUSTOM_BG) === 'true';
-      var saved = localStorage.getItem(STORAGE_BG_IMAGE);
+      const useCustom = localStorage.getItem(STORAGE_CUSTOM_BG) === 'true';
+      const saved = localStorage.getItem(STORAGE_BG_IMAGE);
       if (useCustom && saved) {
         document.body.classList.add('custom-bg');
         document.body.style.backgroundImage = 'url("' + saved + '")';

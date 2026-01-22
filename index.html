@@ -92,6 +92,13 @@
                     </button>
                 </div>
             </div>
+            <!-- Confirmation popup when a section/break ends -->
+            <div id="pomodoroConfirmOverlay" class="pomodoro-confirm-overlay hidden" aria-hidden="true">
+                <div class="pomodoro-confirm-box glass rounded-xl p-5 shadow-xl border border-slate-200 dark:border-slate-600">
+                    <p id="pomodoroConfirmMessage" class="text-slate-800 dark:text-slate-100 mb-4"></p>
+                    <button type="button" id="pomodoroConfirmOk" class="w-full py-2 px-4 rounded-lg font-medium bg-primary text-white hover:opacity-90 transition-opacity">OK</button>
+                </div>
+            </div>
         </div>
 
         <!-- Notes -->

@@ -1,36 +1,77 @@
 /**
  * Pomodoro timer: 25 min focus, 10 min short break, 30 min long break.
- * Long break runs after every 3 completed focus sessions.
+ * Long break after every 3 completed focus sessions. Session count + notifications between sections/breaks.
  */
 (function () {
   // --- Constants (minutes) ---
-  var FOCUS_MIN = 25;
-  var SHORT_BREAK_MIN = 10;
-  var LONG_BREAK_MIN = 30;
-  var SECTIONS_BEFORE_LONG = 3; // number of focus sessions before a long break
+  const FOCUS_MIN = 1;
+  const SHORT_BREAK_MIN = 1;
+  const LONG_BREAK_MIN = 1;
+  const SECTIONS_BEFORE_LONG = 3;
 
   // --- DOM refs ---
-  var display = document.getElementById('pomodoroDisplay');
-  var progressBar = document.getElementById('pomodoroProgressBar');
-  var statusEl = document.getElementById('pomodoroStatus');
-  var sessionCountEl = document.getElementById('pomodoroSessionCount');
-  var phaseLabel = document.getElementById('pomodoroPhaseLabel');
-  var playPauseBtn = document.getElementById('pomodoroPlayPause');
-  var playIcon = document.getElementById('pomodoroPlayIcon');
-  var resetBtn = document.getElementById('pomodoroReset');
-  var stopBtn = document.getElementById('pomodoroStop');
-  var skipBtn = document.getElementById('pomodoroSkip');
+  const display = document.getElementById('pomodoroDisplay');
+  const progressBar = document.getElementById('pomodoroProgressBar');
+  const statusEl = document.getElementById('pomodoroStatus');
+  const sessionCountEl = document.getElementById('pomodoroSessionCount');
+  const phaseLabel = document.getElementById('pomodoroPhaseLabel');
+  const playPauseBtn = document.getElementById('pomodoroPlayPause');
+  const playIcon = document.getElementById('pomodoroPlayIcon');
+  const resetBtn = document.getElementById('pomodoroReset');
+  const stopBtn = document.getElementById('pomodoroStop');
+  const skipBtn = document.getElementById('pomodoroSkip');
 
   if (!display || !progressBar) return;
 
   // --- State ---
-  var phase = 'focus';           // 'focus' | 'short' | 'long'
-  var focusCountInRound = 0;     // focus sessions done in current round (before long break)
-  var sessionsCompleted = 0;     // total completed focus sessions (shown in UI)
-  var timeLeft = FOCUS_MIN * 60; // seconds remaining in current phase
-  var phaseDuration = FOCUS_MIN * 60;
-  var isRunning = false;
-  var tickId = null;             // setInterval id for the 1s tick
+  let phase = 'focus';
+  let focusCountInRound = 0;
+  let sessionsCompleted = 0;
+  let timeLeft = FOCUS_MIN * 60;
+  let phaseDuration = FOCUS_MIN * 60;
+  let isRunning = false;
+  let tickId = null;
+
+  // --- Confirmation popup (when a section/break ends) ---
+  const confirmOverlay = document.getElementById('pomodoroConfirmOverlay');
+  const confirmMessage = document.getElementById('pomodoroConfirmMessage');
+  const confirmOkBtn = document.getElementById('pomodoroConfirmOk');
+
+  /** Play a short beep. */
+  function playBeep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 800;
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    } catch (e) {}
+  }
+
+  /** Show in-app confirmation popup with message; on OK close and optionally start next phase. */
+  function showConfirmPopup(message, onOk) {
+    playBeep();
+    if (confirmMessage) confirmMessage.textContent = message;
+    if (confirmOverlay) {
+      confirmOverlay.classList.remove('hidden');
+      confirmOverlay.setAttribute('aria-hidden', 'false');
+    }
+    function closePopup() {
+      if (confirmOverlay) {
+        confirmOverlay.classList.add('hidden');
+        confirmOverlay.setAttribute('aria-hidden', 'true');
+      }
+      if (typeof onOk === 'function') onOk();
+    }
+    if (confirmOkBtn) {
+      confirmOkBtn.onclick = closePopup;
+    }
+  }
 
   // --- Phase helpers ---
   function phaseDurationSeconds(p) {
@@ -45,7 +86,6 @@
     return 'Long Break';
   }
 
-  /** Switch to phase p and reset timer to full duration. */
   function startPhase(p) {
     phase = p;
     phaseDuration = phaseDurationSeconds(p);
@@ -57,9 +97,13 @@
 
   /**
    * Advance to next phase. countSession: true when focus finished naturally (counts session);
-   * false when user skips (no count). After 3 focus sessions we do long break, else short.
+   * false when skipped. After 3 focus sessions → long break, else short break.
    */
   function goNextPhase(countSession) {
+    const wasFocus = phase === 'focus';
+    const wasShort = phase === 'short';
+    const wasLong = phase === 'long';
+
     if (phase === 'focus') {
       if (countSession) {
         sessionsCompleted++;
@@ -76,12 +120,24 @@
     } else {
       startPhase('focus');
     }
+
+    // Show confirmation popup when a section/break just ended (not on skip); on OK start next phase.
+    if (countSession) {
+      if (wasFocus) {
+        showConfirmPopup(
+          phase === 'long' ? 'Focus done! Time for a long break.' : 'Focus done! Time for a short break.',
+          startTick
+        );
+      } else if (wasShort || wasLong) {
+        showConfirmPopup('Break over. Time to focus.', startTick);
+      }
+    }
   }
 
   // --- UI updates ---
   function formatTime(seconds) {
-    var m = Math.floor(seconds / 60);
-    var s = seconds % 60;
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
     return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
   }
 
@@ -92,7 +148,7 @@
 
   /** Progress bar fills left-to-right as time counts down (elapsed %). */
   function updateProgress() {
-    var pct = phaseDuration ? ((phaseDuration - timeLeft) / phaseDuration) * 100 : 0;
+    const pct = phaseDuration ? ((phaseDuration - timeLeft) / phaseDuration) * 100 : 0;
     progressBar.style.width = pct + '%';
   }
 
