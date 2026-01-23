@@ -221,6 +221,38 @@ body.custom-bg {
   max-width: 320px;
 }
 
+/* Pomodoro Settings modal */
+.pomodoro-settings-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+}
+
+.pomodoro-settings-overlay.hidden {
+  display: none !important;
+}
+
+.pomodoro-settings-box {
+  width: 100%;
+  max-width: 320px;
+}
+
+.pomodoro-settings-input {
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pomodoro-settings-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.25);
+}
+
 /* ========== Confirm modal ========== */
 .confirm-overlay {
   position: fixed;

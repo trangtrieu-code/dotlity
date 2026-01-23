@@ -91,6 +91,42 @@
                         <span class="material-symbols-outlined">skip_next</span>
                     </button>
                 </div>
+                <div class="flex justify-center gap-3 mt-4">
+                    <button type="button" id="pomodoroSettingsBtn" class="pomodoro-nav-btn inline-flex items-center gap-2 py-2 px-4 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-sm font-medium">
+                        <span class="material-symbols-outlined text-lg">settings</span>
+                        Settings
+                    </button>
+                    <button type="button" id="pomodoroHistoryBtn" class="pomodoro-nav-btn inline-flex items-center gap-2 py-2 px-4 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-sm font-medium" disabled title="Coming soon">
+                        <span class="material-symbols-outlined text-lg">bar_chart</span>
+                        History
+                    </button>
+                </div>
+            </div>
+            <!-- Settings modal -->
+            <div id="pomodoroSettingsOverlay" class="pomodoro-settings-overlay hidden" aria-hidden="true">
+                <div class="pomodoro-settings-box glass rounded-xl shadow-xl border border-slate-200 dark:border-slate-600 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800/80">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-100">Settings</h3>
+                        <button type="button" id="pomodoroSettingsClose" class="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" aria-label="Close">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <div>
+                            <label for="pomodoroFocusDuration" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Focus Duration (minutes)</label>
+                            <input type="number" id="pomodoroFocusDuration" min="1" max="120" value="25" class="pomodoro-settings-input w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm">
+                        </div>
+                        <div>
+                            <label for="pomodoroShortBreakDuration" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Short Break (minutes)</label>
+                            <input type="number" id="pomodoroShortBreakDuration" min="1" max="60" value="10" class="pomodoro-settings-input w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm">
+                        </div>
+                        <div>
+                            <label for="pomodoroLongBreakDuration" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Long Break (minutes)</label>
+                            <input type="number" id="pomodoroLongBreakDuration" min="1" max="60" value="30" class="pomodoro-settings-input w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm">
+                        </div>
+                        <button type="button" id="pomodoroSettingsSave" class="w-full py-2 px-4 rounded-lg font-medium bg-primary text-white hover:opacity-90 transition-opacity text-sm">Save</button>
+                    </div>
+                </div>
             </div>
             <!-- Confirmation popup when a section/break ends -->
             <div id="pomodoroConfirmOverlay" class="pomodoro-confirm-overlay hidden" aria-hidden="true">

@@ -1,13 +1,32 @@
 /**
- * Pomodoro timer: 25 min focus, 10 min short break, 30 min long break.
- * Long break after every 3 completed focus sessions. Session count + notifications between sections/breaks.
+ * Pomodoro timer: configurable focus / short break / long break. Long break after every 3 focus sessions.
+ * Session count, confirmation popup between sections, settings persisted to localStorage.
  */
 (function () {
-  // --- Constants (minutes) ---
-  const FOCUS_MIN = 1;
-  const SHORT_BREAK_MIN = 1;
-  const LONG_BREAK_MIN = 1;
+  const STORAGE_SETTINGS = 'dotlity-pomodoro-settings';
   const SECTIONS_BEFORE_LONG = 3;
+  const DEFAULT_SETTINGS = { focusDuration: 25, shortBreakDuration: 10, longBreakDuration: 30 };
+
+  function loadSettings() {
+    try {
+      const s = localStorage.getItem(STORAGE_SETTINGS);
+      if (s) {
+        const parsed = JSON.parse(s);
+        return {
+          focusDuration: Math.max(1, Math.min(120, parseInt(parsed.focusDuration, 10) || 25)),
+          shortBreakDuration: Math.max(1, Math.min(60, parseInt(parsed.shortBreakDuration, 10) || 10)),
+          longBreakDuration: Math.max(1, Math.min(60, parseInt(parsed.longBreakDuration, 10) || 30))
+        };
+      }
+    } catch (e) {}
+    return { ...DEFAULT_SETTINGS };
+  }
+
+  function saveSettingsToStorage(settings) {
+    try {
+      localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(settings));
+    } catch (e) {}
+  }
 
   // --- DOM refs ---
   const display = document.getElementById('pomodoroDisplay');
@@ -20,15 +39,22 @@
   const resetBtn = document.getElementById('pomodoroReset');
   const stopBtn = document.getElementById('pomodoroStop');
   const skipBtn = document.getElementById('pomodoroSkip');
+  const settingsOverlay = document.getElementById('pomodoroSettingsOverlay');
+  const settingsCloseBtn = document.getElementById('pomodoroSettingsClose');
+  const settingsSaveBtn = document.getElementById('pomodoroSettingsSave');
+  const focusDurationInput = document.getElementById('pomodoroFocusDuration');
+  const shortBreakDurationInput = document.getElementById('pomodoroShortBreakDuration');
+  const longBreakDurationInput = document.getElementById('pomodoroLongBreakDuration');
 
   if (!display || !progressBar) return;
 
   // --- State ---
+  let settings = loadSettings();
   let phase = 'focus';
   let focusCountInRound = 0;
   let sessionsCompleted = 0;
-  let timeLeft = FOCUS_MIN * 60;
-  let phaseDuration = FOCUS_MIN * 60;
+  let timeLeft = settings.focusDuration * 60;
+  let phaseDuration = settings.focusDuration * 60;
   let isRunning = false;
   let tickId = null;
 
@@ -75,9 +101,19 @@
 
   // --- Phase helpers ---
   function phaseDurationSeconds(p) {
-    if (p === 'focus') return FOCUS_MIN * 60;
-    if (p === 'short') return SHORT_BREAK_MIN * 60;
-    return LONG_BREAK_MIN * 60;
+    if (p === 'focus') return settings.focusDuration * 60;
+    if (p === 'short') return settings.shortBreakDuration * 60;
+    return settings.longBreakDuration * 60;
+  }
+
+  /** Apply current settings to timer (when not running: reset current phase duration and display). */
+  function applySettings() {
+    phaseDuration = phaseDurationSeconds(phase);
+    if (!isRunning) {
+      timeLeft = phaseDuration;
+      updateDisplay();
+      updateProgress();
+    }
   }
 
   function phaseLabelText(p) {
@@ -213,10 +249,45 @@
     goNextPhase(false); // don't count as completed session
   }
 
+  // --- Settings modal ---
+  function openSettings() {
+    if (focusDurationInput) focusDurationInput.value = settings.focusDuration;
+    if (shortBreakDurationInput) shortBreakDurationInput.value = settings.shortBreakDuration;
+    if (longBreakDurationInput) longBreakDurationInput.value = settings.longBreakDuration;
+    if (settingsOverlay) {
+      settingsOverlay.classList.remove('hidden');
+      settingsOverlay.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function closeSettings() {
+    if (settingsOverlay) {
+      settingsOverlay.classList.add('hidden');
+      settingsOverlay.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function saveSettings() {
+    const focus = Math.max(1, Math.min(120, parseInt(focusDurationInput?.value, 10) || 25));
+    const short = Math.max(1, Math.min(60, parseInt(shortBreakDurationInput?.value, 10) || 10));
+    const long = Math.max(1, Math.min(60, parseInt(longBreakDurationInput?.value, 10) || 30));
+    settings = { focusDuration: focus, shortBreakDuration: short, longBreakDuration: long };
+    saveSettingsToStorage(settings);
+    applySettings();
+    closeSettings();
+  }
+
   if (playPauseBtn) playPauseBtn.addEventListener('click', handlePlayPause);
   if (resetBtn) resetBtn.addEventListener('click', handleReset);
   if (stopBtn) stopBtn.addEventListener('click', handleStop);
   if (skipBtn) skipBtn.addEventListener('click', handleSkip);
+
+  document.getElementById('pomodoroSettingsBtn')?.addEventListener('click', openSettings);
+  if (settingsCloseBtn) settingsCloseBtn.addEventListener('click', closeSettings);
+  if (settingsSaveBtn) settingsSaveBtn.addEventListener('click', saveSettings);
+  if (settingsOverlay) {
+    settingsOverlay.addEventListener('click', (e) => { if (e.target === settingsOverlay) closeSettings(); });
+  }
 
   startPhase('focus'); // init UI
 })();
