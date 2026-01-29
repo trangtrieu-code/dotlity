@@ -4,8 +4,17 @@
  */
 (function () {
   const STORAGE_SETTINGS = 'dotlity-pomodoro-settings';
+  const STORAGE_HISTORY = 'dotlity-pomodoro-history';
   const SECTIONS_BEFORE_LONG = 3;
   const DEFAULT_SETTINGS = { focusDuration: 25, shortBreakDuration: 10, longBreakDuration: 30 };
+
+  function getLocalDateString(d) {
+    const date = d || new Date();
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
 
   function loadSettings() {
     try {
@@ -28,6 +37,21 @@
     } catch (e) {}
   }
 
+  function loadHistory() {
+    try {
+      const s = localStorage.getItem(STORAGE_HISTORY);
+      return s ? JSON.parse(s) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveHistoryToStorage(history) {
+    try {
+      localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+    } catch (e) {}
+  }
+
   // --- DOM refs ---
   const display = document.getElementById('pomodoroDisplay');
   const progressBar = document.getElementById('pomodoroProgressBar');
@@ -45,14 +69,26 @@
   const focusDurationInput = document.getElementById('pomodoroFocusDuration');
   const shortBreakDurationInput = document.getElementById('pomodoroShortBreakDuration');
   const longBreakDurationInput = document.getElementById('pomodoroLongBreakDuration');
+  const timerView = document.getElementById('pomodoroTimerView');
+  const historyView = document.getElementById('pomodoroHistoryView');
+  const historyCloseBtn = document.getElementById('pomodoroHistoryClose');
+  const historyTodayCount = document.getElementById('pomodoroHistoryTodayCount');
+  const historyTodayHours = document.getElementById('pomodoroHistoryTodayHours');
+  const historyWeekCount = document.getElementById('pomodoroHistoryWeekCount');
+  const historyWeekHours = document.getElementById('pomodoroHistoryWeekHours');
+  const historyMonthCount = document.getElementById('pomodoroHistoryMonthCount');
+  const historyMonthLabel = document.getElementById('pomodoroHistoryMonthLabel');
+  const historyMonthHours = document.getElementById('pomodoroHistoryMonthHours');
+  const historyTotalCount = document.getElementById('pomodoroHistoryTotalCount');
 
   if (!display || !progressBar) return;
 
   // --- State ---
   let settings = loadSettings();
+  let history = loadHistory();
   let phase = 'focus';
   let focusCountInRound = 0;
-  let sessionsCompleted = 0;
+  let sessionsCompleted = 0; // used for round logic (long break every 3)
   let timeLeft = settings.focusDuration * 60;
   let phaseDuration = settings.focusDuration * 60;
   let isRunning = false;
@@ -144,6 +180,9 @@
       if (countSession) {
         sessionsCompleted++;
         focusCountInRound++;
+        history.push({ date: getLocalDateString(), durationMinutes: settings.focusDuration });
+        saveHistoryToStorage(history);
+        updateSessionCount();
       }
       if (focusCountInRound >= SECTIONS_BEFORE_LONG) {
         startPhase('long');
@@ -179,7 +218,13 @@
 
   function updateDisplay() {
     display.textContent = formatTime(timeLeft);
-    if (sessionCountEl) sessionCountEl.textContent = sessionsCompleted;
+  }
+
+  /** Session count shown in header = today's completed focus sessions from history. */
+  function updateSessionCount() {
+    const today = getLocalDateString();
+    const count = history.filter((e) => e.date === today).length;
+    if (sessionCountEl) sessionCountEl.textContent = count;
   }
 
   /** Progress bar fills left-to-right as time counts down (elapsed %). */
@@ -289,5 +334,70 @@
     settingsOverlay.addEventListener('click', (e) => { if (e.target === settingsOverlay) closeSettings(); });
   }
 
+  // --- History view ---
+  function showHistory() {
+    if (timerView) timerView.classList.add('hidden');
+    if (historyView) {
+      historyView.classList.remove('hidden');
+      updateHistoryView();
+    }
+  }
+
+  function showTimer() {
+    if (historyView) historyView.classList.add('hidden');
+    if (timerView) timerView.classList.remove('hidden');
+  }
+
+  function updateHistoryView() {
+    const now = new Date();
+    const todayStr = getLocalDateString(now);
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    const startOfWeekStr = getLocalDateString(startOfWeek);
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfMonthStr = getLocalDateString(startOfMonth);
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    let todayCount = 0;
+    let todayHours = 0;
+    let weekCount = 0;
+    let weekHours = 0;
+    let monthCount = 0;
+    let monthHours = 0;
+    let totalCount = 0;
+
+    for (const e of history) {
+      if (!e.date) continue;
+      const durationH = (e.durationMinutes || settings.focusDuration) / 60;
+      totalCount++;
+      if (e.date === todayStr) {
+        todayCount++;
+        todayHours += durationH;
+      }
+      if (e.date >= startOfWeekStr && e.date <= todayStr) {
+        weekCount++;
+        weekHours += durationH;
+      }
+      if (e.date >= startOfMonthStr && e.date <= todayStr) {
+        monthCount++;
+        monthHours += durationH;
+      }
+    }
+
+    const set = (el, text) => { if (el) el.textContent = text; };
+    set(historyTodayCount, String(todayCount));
+    set(historyTodayHours, todayHours.toFixed(2) + ' h');
+    set(historyWeekCount, String(weekCount));
+    set(historyWeekHours, weekHours.toFixed(2) + ' h');
+    set(historyMonthCount, String(monthCount));
+    set(historyMonthLabel, monthNames[now.getMonth()]);
+    set(historyMonthHours, monthHours.toFixed(2) + ' h');
+    set(historyTotalCount, String(totalCount));
+  }
+
+  document.getElementById('pomodoroHistoryBtn')?.addEventListener('click', showHistory);
+  if (historyCloseBtn) historyCloseBtn.addEventListener('click', showTimer);
+
   startPhase('focus'); // init UI
+  updateSessionCount();
 })();

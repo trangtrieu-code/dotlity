@@ -63,7 +63,9 @@
                     <span class="material-symbols-outlined text-sm">close</span>
                 </button>
             </div>
-            <div class="pomodoro-body p-5">
+            <div class="pomodoro-body p-5 relative">
+                <!-- Timer view -->
+                <div id="pomodoroTimerView" class="pomodoro-view">
                 <div class="flex justify-between items-center mb-4">
                     <span class="text-sm text-slate-500 dark:text-slate-400">Sessions: <span id="pomodoroSessionCount">0</span></span>
                 </div>
@@ -96,10 +98,41 @@
                         <span class="material-symbols-outlined text-lg">settings</span>
                         Settings
                     </button>
-                    <button type="button" id="pomodoroHistoryBtn" class="pomodoro-nav-btn inline-flex items-center gap-2 py-2 px-4 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-sm font-medium" disabled title="Coming soon">
+                    <button type="button" id="pomodoroHistoryBtn" class="pomodoro-nav-btn inline-flex items-center gap-2 py-2 px-4 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-sm font-medium">
                         <span class="material-symbols-outlined text-lg">bar_chart</span>
                         History
                     </button>
+                </div>
+                </div>
+                <!-- History view -->
+                <div id="pomodoroHistoryView" class="pomodoro-view hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-100">History</h3>
+                        <button type="button" id="pomodoroHistoryClose" class="p-1 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" aria-label="Close history">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="pomodoro-history-grid grid grid-cols-2 gap-3">
+                        <div class="pomodoro-history-card rounded-xl p-4 bg-slate-100/80 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-center">
+                            <div id="pomodoroHistoryTodayCount" class="pomodoro-history-count text-xl font-bold text-red-600 dark:text-red-400">0</div>
+                            <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">Today</div>
+                            <div id="pomodoroHistoryTodayHours" class="text-xs text-slate-500 dark:text-slate-400">0.00 h</div>
+                        </div>
+                        <div class="pomodoro-history-card rounded-xl p-4 bg-slate-100/80 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-center">
+                            <div id="pomodoroHistoryWeekCount" class="pomodoro-history-count text-xl font-bold text-red-600 dark:text-red-400">0</div>
+                            <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">This Week</div>
+                            <div id="pomodoroHistoryWeekHours" class="text-xs text-slate-500 dark:text-slate-400">0.00 h</div>
+                        </div>
+                        <div class="pomodoro-history-card rounded-xl p-4 bg-slate-100/80 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-center">
+                            <div id="pomodoroHistoryMonthCount" class="pomodoro-history-count text-xl font-bold text-red-600 dark:text-red-400">0</div>
+                            <div id="pomodoroHistoryMonthLabel" class="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">February</div>
+                            <div id="pomodoroHistoryMonthHours" class="text-xs text-slate-500 dark:text-slate-400">0.00 h</div>
+                        </div>
+                        <div class="pomodoro-history-card rounded-xl p-4 bg-slate-100/80 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-center">
+                            <div id="pomodoroHistoryTotalCount" class="pomodoro-history-count text-xl font-bold text-red-600 dark:text-red-400">0</div>
+                            <div class="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">Total</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- Settings modal -->

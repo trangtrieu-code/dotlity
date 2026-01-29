@@ -253,6 +253,11 @@ body.custom-bg {
   box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.25);
 }
 
+/* Pomodoro timer / history view toggle */
+.pomodoro-view.hidden {
+  display: none !important;
+}
+
 /* ========== Confirm modal ========== */
 .confirm-overlay {
   position: fixed;
