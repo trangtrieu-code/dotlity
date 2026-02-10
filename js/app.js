@@ -1,22 +1,7 @@
 (function () {
-  // Constants
   const STORAGE_THEME = 'dotlity-theme';
-  const STORAGE_USER_NAME = 'dotlity-userName';
-  const STORAGE_BG_IMAGE = 'dotlity-bgImage';
-  const STORAGE_CUSTOM_BG = 'dotlity-customBg';
-  const PICSUM_BASE = 'https://picsum.photos';
 
-  // DOM refs
-  const settingsBtn = document.getElementById('appSettingsBtn');
-  const settingsModal = document.getElementById('settingsModal');
-  const settingsClose = document.getElementById('settingsClose');
-  const settingsSave = document.getElementById('settingsSave');
-  const settingsUserName = document.getElementById('settingsUserName');
-  const settingsCustomBg = document.getElementById('settingsCustomBg');
-  const settingsNewBgBtn = document.getElementById('settingsNewBgBtn');
-  const settingsBackdrop = settingsModal ? settingsModal.querySelector('.settings-backdrop') : null;
-
-  // Theme: apply saved preference on load (skip if custom background is used later)
+  // Theme: apply saved preference on load (custom background is applied by settings.js)
   const html = document.documentElement;
   const savedTheme = localStorage.getItem(STORAGE_THEME);
   if (savedTheme === 'dark') {
@@ -83,6 +68,7 @@
     });
   });
 
+  
   // Dragging: drag a widget by its header to move it
   const main = document.querySelector('main');
   if (main) {
@@ -128,119 +114,4 @@
       });
     });
   }
-
-
-  // Settings modal: save, restore, and apply custom background
-  const settingsSnapshot = { customBg: false, bgImage: null, name: '' };
-  let draftCustomBg = false;
-  let draftBgImage = null;
-
-  // Helper: apply custom background to body
-  function applyToBodyOnly(url) {
-    const body = document.body;
-    if (!url) {
-      body.classList.remove('custom-bg');
-      body.style.backgroundImage = '';
-      return;
-    }
-    body.classList.add('custom-bg');
-    body.style.backgroundImage = 'url("' + url + '")';
-  }
-
-  // Helper: restore custom background from snapshot
-  function restoreSnapshot() {
-    if (settingsSnapshot.customBg && settingsSnapshot.bgImage) {
-      applyToBodyOnly(settingsSnapshot.bgImage);
-    } else {
-      applyToBodyOnly(null);
-    }
-  }
-
-  // Helper: set custom background from checkbox
-  function setCustomBgFromCheckbox() {
-    if (!settingsCustomBg) return;
-    draftCustomBg = settingsCustomBg.checked;
-    if (!draftCustomBg) {
-      restoreSnapshot();
-    }
-  }
-
-  // Helper: load new background
-  function loadNewBackground() {
-    if (!settingsNewBgBtn) return;
-    settingsNewBgBtn.disabled = true;
-    settingsNewBgBtn.textContent = 'Loading…';
-    const img = new Image();
-    const url = PICSUM_BASE + '/1920/1080?random=' + Date.now();
-    img.onload = function () {
-      draftBgImage = url;
-      draftCustomBg = true;
-      if (settingsCustomBg) settingsCustomBg.checked = true;
-      applyToBodyOnly(url);
-      settingsNewBgBtn.disabled = false;
-      settingsNewBgBtn.innerHTML = '<span class="material-symbols-outlined text-lg">image</span> New background';
-    };
-    img.onerror = function () {
-      settingsNewBgBtn.disabled = false;
-      settingsNewBgBtn.innerHTML = '<span class="material-symbols-outlined text-lg">image</span> New background';
-    };
-    img.src = url;
-  }
-
-  // Helper: open settings modal
-  function openSettings() {
-    if (!settingsModal) return;
-    try {
-      settingsSnapshot.customBg = localStorage.getItem(STORAGE_CUSTOM_BG) === 'true';
-      settingsSnapshot.bgImage = localStorage.getItem(STORAGE_BG_IMAGE) || null;
-      settingsSnapshot.name = localStorage.getItem(STORAGE_USER_NAME) || '';
-    } catch (e) {}
-    draftCustomBg = settingsSnapshot.customBg;
-    draftBgImage = settingsSnapshot.bgImage;
-    if (settingsUserName) settingsUserName.value = settingsSnapshot.name;
-    if (settingsCustomBg) settingsCustomBg.checked = draftCustomBg;
-    settingsModal.classList.remove('hidden');
-    settingsModal.setAttribute('aria-hidden', 'false');
-  }
-
-  // clise settings modal
-  function closeSettings(restore) {
-    if (!settingsModal) return;
-    if (restore !== false) restoreSnapshot();
-    settingsModal.classList.add('hidden');
-    settingsModal.setAttribute('aria-hidden', 'true');
-  }
-
-  // save settings
-  function saveSettings() {
-    const name = settingsUserName ? settingsUserName.value.trim() : '';
-    try {
-      if (name) localStorage.setItem(STORAGE_USER_NAME, name);
-      else localStorage.removeItem(STORAGE_USER_NAME);
-      localStorage.setItem(STORAGE_CUSTOM_BG, draftCustomBg ? 'true' : 'false');
-      if (draftCustomBg && draftBgImage) localStorage.setItem(STORAGE_BG_IMAGE, draftBgImage);
-      applyToBodyOnly(draftCustomBg ? draftBgImage : null);
-    } catch (e) {}
-    closeSettings(false);
-    document.dispatchEvent(new CustomEvent('dotlity-settings-saved'));
-  }
-
-  if (settingsBtn) settingsBtn.addEventListener('click', openSettings);
-  if (settingsClose) settingsClose.addEventListener('click', function () { closeSettings(true); });
-  if (settingsSave) settingsSave.addEventListener('click', saveSettings);
-  if (settingsBackdrop) settingsBackdrop.addEventListener('click', function () { closeSettings(true); });
-  if (settingsNewBgBtn) settingsNewBgBtn.addEventListener('click', loadNewBackground);
-  if (settingsCustomBg) settingsCustomBg.addEventListener('change', setCustomBgFromCheckbox);
-
-  // apply custom background from localStorage
-  (function () {
-    try {
-      const useCustom = localStorage.getItem(STORAGE_CUSTOM_BG) === 'true';
-      const saved = localStorage.getItem(STORAGE_BG_IMAGE);
-      if (useCustom && saved) {
-        document.body.classList.add('custom-bg');
-        document.body.style.backgroundImage = 'url("' + saved + '")';
-      }
-    } catch (e) {}
-  })();
 })();

@@ -4,20 +4,23 @@
   const STORAGE_USER_NAME = 'dotlity-userName';
 
   // DOM refs
-  const headerTime = document.getElementById('headerTime');
   const headerGreeting = document.getElementById('headerGreeting');
   const headerWeatherText = document.getElementById('headerWeatherText');
   const headerWeatherIcon = document.getElementById('headerWeatherIcon');
 
-  // Default timezone is UTC
-  let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
 
-  if (!headerTime) return;
 
-  /** Map Open-Meteo weather_code (number) to short description string. */
+  /** True if hour in timezone is between 6 and 20 (for sun vs moon icon). */
+  function isDaytime(timezone) {
+    const formatter = new Intl.DateTimeFormat(locale, { timeZone: timezone, hour: 'numeric', hour12: false });
+    const hour = parseInt(formatter.format(new Date()), 10);
+    return hour >= 6 && hour < 20;
+  }
+
+  /** Short weather description for display (e.g. "Sunny", "Cloudy"). */
   function getWeatherDescription(code) {
     const codes = {
-      0: 'Clear', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+      0: 'Clear', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Cloudy',
       45: 'Foggy', 48: 'Foggy',
       51: 'Light drizzle', 53: 'Drizzle', 55: 'Drizzle',
       61: 'Light rain', 63: 'Rain', 65: 'Heavy rain',
@@ -26,13 +29,6 @@
       95: 'Thunderstorm', 96: 'Thunderstorm', 99: 'Thunderstorm'
     };
     return codes[code] || 'Unknown';
-  }
-
-  /** True if hour in timezone is between 6 and 20 (for sun vs moon icon). */
-  function isDaytime(timezone) {
-    const formatter = new Intl.DateTimeFormat('en-US', { timeZone: timezone, hour: 'numeric', hour12: false });
-    const hour = parseInt(formatter.format(new Date()), 10);
-    return hour >= 6 && hour < 20;
   }
 
   /** Icon name for Material Symbols: sunny, cloudy, night, rain, snow, thunder. */
@@ -47,31 +43,20 @@
 
 
 
-  /** 0–11 Morning, 12–17 Afternoon, 18–23 Evening */
+  /** 0–5 Good night, 6–11 Morning, 12–17 Afternoon, 18–23 Evening */
   function getGreeting(timezone) {
-    const formatter = new Intl.DateTimeFormat('en-US', { timeZone: timezone, hour: 'numeric', hour12: false });
+    const formatter = new Intl.DateTimeFormat(locale, { timeZone: timezone, hour: 'numeric', hour12: false });
     const hour = parseInt(formatter.format(new Date()), 10);
     let base = 'Good Morning';
-    if (hour >= 12 && hour < 18) base = 'Good Afternoon';
+    if (hour >= 0 && hour < 6) base = 'Good night';
+    else if (hour >= 12 && hour < 18) base = 'Good Afternoon';
     else if (hour >= 18) base = 'Good Evening';
     const name = (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_USER_NAME)) || '';
     const trimmed = name.trim();
     return trimmed ? base + ', ' + trimmed : base;
   }
 
-  // Live local time — update every second
-  function updateTime() {
-    headerTime.textContent = new Date().toLocaleTimeString('en-US', {
-      timeZone: userTimezone,
-      hour12: true,
-      hour: 'numeric',
-      minute: '2-digit'
-    });
-    if (headerGreeting) headerGreeting.textContent = getGreeting(userTimezone);
-  }
-  updateTime(); // Run once immediately
-  setInterval(updateTime, 1000); // Then update every 1000ms (1 second)
-  document.addEventListener('dotlity-settings-saved', updateTime); // Update greeting as soon as name is saved
+  // document.addEventListener('dotlity-settings-saved', updateTime); // Update greeting as soon as name is saved
 
   // Weather from Open-Meteo (need lat/lon from IP)
   // async/await lets us wait for API responses without blocking the page
@@ -82,7 +67,7 @@
       const loc = await locRes.json(); // Parse JSON response
       const lat = loc.latitude;
       const lon = loc.longitude;
-      if (loc.timezone) userTimezone = loc.timezone;
+      // Timezone stays from Intl (device); we only use ipapi for lat/lon (weather)
       if (lat == null || lon == null) throw new Error('No location');
 
       // Use location to get weather data
@@ -92,7 +77,8 @@
       const data = await res.json();
       const cur = data.current;
       const tempC = Math.round(cur.temperature_2m);
-      headerWeatherText.textContent = tempC + '°C';
+      const desc = getWeatherDescription(cur.weather_code);
+      headerWeatherText.textContent = tempC + '°C, ' + desc;
 
       const isDay = isDaytime(userTimezone);
       headerWeatherIcon.textContent = getWeatherIcon(cur.weather_code, isDay);
