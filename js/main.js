@@ -9,7 +9,7 @@
 
 import './app.js';
 import './settings.js';
-import './time-weather.js';
+import './weather.js';
 import './pomodoro.js';
 import './notes.js';
 import './todo.js';
