@@ -42,10 +42,10 @@
                     <span class="material-symbols-outlined text-[1.125rem]" aria-hidden="true">schedule</span>
                     <span id="headerTime">--:--</span>
                 </div>
-                <div class="flex items-center gap-1.5">
+                <button type="button" id="headerWeatherTrigger" class="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity rounded-sm" aria-label="Open weather forecast">
                     <span class="material-symbols-outlined header-weather-icon text-[1.125rem]" id="headerWeatherIcon" aria-hidden="true">wb_sunny</span>
                     <span id="headerWeatherText">--°C</span>
-                </div>
+                </button>
             </div>
         </div>
         <button id="themeToggle" type="button" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
@@ -240,6 +240,43 @@
                 <div class="flex gap-3">
                     <button type="button" id="confirmCancel" class="flex-1 py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-sm">Cancel</button>
                     <button type="button" id="confirmOk" class="flex-1 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium text-sm">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather forecast popup (opened by clicking header weather) -->
+        <div id="weatherForecastPopup" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden" aria-hidden="true">
+            <div id="weatherForecastBackdrop" class="absolute inset-0 bg-black/30" aria-hidden="true"></div>
+            <div class="widget-window glass absolute top-[12%] left-[12%] w-80 z-20 rounded-xl shadow-2xl">
+                <div class="widget-header flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700 rounded-t-xl">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-slate-500 text-lg">partly_cloudy_day</span>
+                        <span class="text-sm font-semibold text-slate-800 dark:text-slate-100">Weather Forecast</span>
+                    </div>
+                    <button type="button" id="weatherForecastClose" class="p-1 rounded text-slate-400 hover:text-red-500 transition-colors" aria-label="Close">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+                <div class="p-5">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <p id="weatherForecastTemp" class="text-4xl font-display font-semibold text-slate-800 dark:text-slate-100">--°</p>
+                            <p id="weatherForecastLocation" class="text-sm text-slate-500 dark:text-slate-400">--</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-1">
+                                <span class="material-symbols-outlined text-base text-primary">humidity_mid</span>
+                                <span id="weatherForecastHumidity">--%</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-base text-primary">air</span>
+                                <span id="weatherForecastWind">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="weatherForecastDays" class="grid grid-cols-5 gap-1 border-t border-slate-100 dark:border-slate-700 pt-4">
+                        <!-- Filled by JS from API or placeholders (--) when fetch fails -->
+                    </div>
                 </div>
             </div>
         </div>
